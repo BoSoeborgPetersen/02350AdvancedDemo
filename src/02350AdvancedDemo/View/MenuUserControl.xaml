@@ -17,7 +17,6 @@
                 <RibbonButton ToolTip="New Diagram" SmallImageSource="/Images/New.png" />
                 <RibbonButton ToolTip="Open Diagram" SmallImageSource="/Images/Open.png" />
                 <RibbonButton ToolTip="Save Diagram" SmallImageSource="/Images/Save.png" />
-                <RibbonSeparator BorderThickness="20"/>
                 <RibbonSplitButton ToolTip="Undo" SmallImageSource="/Images/Undo.png" Command="{Binding UndoCommand}">
                     <RibbonSplitMenuItem Header="Undo 2" ImageSource="/Images/Undo.png"/>
                     <RibbonSplitMenuItem Header="Undo 3" ImageSource="/Images/Undo.png"/>
@@ -30,7 +29,6 @@
                     <RibbonSplitMenuItem Header="Redo 4" ImageSource="/Images/Redo.png"/>
                     <RibbonSplitMenuItem Header="Redo 5" ImageSource="/Images/Redo.png"/>
                 </RibbonSplitButton>
-                <RibbonSeparator BorderBrush="Black" FontSize="20" FontWeight="Bold" Margin="20" Width="20"/>
                 <RibbonButton ToolTip="Cut" SmallImageSource="/Images/Cut.png" />
                 <RibbonButton ToolTip="Copy" SmallImageSource="/Images/Copy.png" />
                 <RibbonSplitButton ToolTip="Paste" SmallImageSource="/Images/Paste.png">
@@ -43,7 +41,7 @@
         </Ribbon.QuickAccessToolBar>
         <!-- Application Menu, located at the left-hand side (down arrow) -->
         <Ribbon.ApplicationMenu>
-            <RibbonApplicationMenu Label="File2" Name="File3" KeyTip="F">
+            <RibbonApplicationMenu KeyTip="F" SmallImageSource="/Images/Settings.png">
                 <RibbonApplicationMenuItem Header="Options" ImageSource="/Images/Options.png" />
                 <RibbonApplicationMenuItem Header="Exit" ImageSource="/Images/Exit.png" />
             </RibbonApplicationMenu>
@@ -78,6 +76,7 @@
                 <RibbonButton SmallImageSource="/Images/Cut.png" Label="Cut" KeyTip="X" />
                 <RibbonButton SmallImageSource="/Images/Copy.png" Label="Copy" KeyTip="C" />
                 <RibbonMenuButton SmallImageSource="/Images/Paste.png" Label="Paste" KeyTip="V">
+                    <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Paste"/>
                     <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Only Shapes"/>
                     <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Something?"/>
                 </RibbonMenuButton>
