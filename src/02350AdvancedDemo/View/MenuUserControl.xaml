@@ -14,9 +14,9 @@
         <!-- Quick Access Toolbar - located at the upper-left corner -->
         <Ribbon.QuickAccessToolBar>
             <RibbonQuickAccessToolBar>
-                <RibbonButton ToolTip="New Diagram" SmallImageSource="/Images/New.png" />
-                <RibbonButton ToolTip="Open Diagram" SmallImageSource="/Images/Open.png" />
-                <RibbonButton ToolTip="Save Diagram" SmallImageSource="/Images/Save.png" />
+                <RibbonButton ToolTip="New Diagram" SmallImageSource="/Images/New.png" Command="{Binding NewDiagramCommand}"/>
+                <RibbonButton ToolTip="Open Diagram" SmallImageSource="/Images/Open.png" Command="{Binding OpenDiagramCommand}"/>
+                <RibbonButton ToolTip="Save Diagram" SmallImageSource="/Images/Save.png" Command="{Binding SaveDiagramCommand}"/>
                 <RibbonSplitButton ToolTip="Undo" SmallImageSource="/Images/Undo.png" Command="{Binding UndoCommand}">
                     <RibbonSplitMenuItem Header="Undo 2" ImageSource="/Images/Undo.png"/>
                     <RibbonSplitMenuItem Header="Undo 3" ImageSource="/Images/Undo.png"/>
@@ -42,7 +42,12 @@
         <!-- Application Menu, located at the left-hand side (down arrow) -->
         <Ribbon.ApplicationMenu>
             <RibbonApplicationMenu KeyTip="F" SmallImageSource="/Images/Settings.png">
+                <RibbonApplicationMenuItem Header="New" ImageSource="/Images/New.png" Command="{Binding NewDiagramCommand}"/>
+                <RibbonApplicationMenuItem Header="Open" ImageSource="/Images/Open.png" Command="{Binding OpenDiagramCommand}"/>
+                <RibbonApplicationMenuItem Header="Save" ImageSource="/Images/Save.png" Command="{Binding SaveDiagramCommand}"/>
+                <RibbonSeparator/>
                 <RibbonApplicationMenuItem Header="Options" ImageSource="/Images/Options.png" />
+                <RibbonSeparator/>
                 <RibbonApplicationMenuItem Header="Exit" ImageSource="/Images/Exit.png" />
             </RibbonApplicationMenu>
         </Ribbon.ApplicationMenu>
@@ -50,9 +55,9 @@
         <RibbonTab Header="Home" KeyTip="H" >
             <!-- Load/Save group-->
             <RibbonGroup Header="Load/Save">
-                <RibbonButton SmallImageSource="/Images/New.png" Label="New" KeyTip="N" />
-                <RibbonButton SmallImageSource="/Images/Open.png" Label="Open" KeyTip="O" />
-                <RibbonButton SmallImageSource="/Images/Save.png" Label="Save" KeyTip="S" />
+                <RibbonButton SmallImageSource="/Images/New.png" Label="New" KeyTip="N" Command="{Binding NewDiagramCommand}"/>
+                <RibbonButton SmallImageSource="/Images/Open.png" Label="Open" KeyTip="O" Command="{Binding OpenDiagramCommand}"/>
+                <RibbonButton SmallImageSource="/Images/Save.png" Label="Save" KeyTip="S" Command="{Binding SaveDiagramCommand}"/>
             </RibbonGroup>
             <!-- Undo/Redo group-->
             <RibbonGroup Header="Undo/Redo">

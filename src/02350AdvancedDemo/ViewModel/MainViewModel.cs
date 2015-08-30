@@ -1,14 +1,14 @@
-﻿using _02350AdvancedDemo.Command;
-using _02350AdvancedDemo.Model;
+﻿using _02350AdvancedDemo.Model;
+using _02350AdvancedDemo.Serialization;
+using _02350AdvancedDemo.UndoRedo;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,10 +27,14 @@ namespace _02350AdvancedDemo.ViewModel
 
         public ObservableCollection<Shape> Shapes { get; set; }
         public ObservableCollection<Line> Lines { get; set; }
-        
+
+        public ICommand NewDiagramCommand { get; }
+        public ICommand OpenDiagramCommand { get; }
+        public ICommand SaveDiagramCommand { get; }
+
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
-        
+
         public ICommand AddShapeCommand { get; }
         public ICommand RemoveShapeCommand { get; }
         public ICommand AddLineCommand { get; }
@@ -51,9 +55,13 @@ namespace _02350AdvancedDemo.ViewModel
                 new Line() { From = Shapes[0], To = Shapes[1] } 
             };
 
+            NewDiagramCommand = new RelayCommand(NewDiagram);
+            OpenDiagramCommand = new RelayCommand(OpenDiagram);
+            SaveDiagramCommand = new RelayCommand(SaveDiagram);
+
             UndoCommand = new RelayCommand(undoRedoController.Undo, undoRedoController.CanUndo);
             RedoCommand = new RelayCommand(undoRedoController.Redo, undoRedoController.CanRedo);
-            
+
             AddShapeCommand = new RelayCommand(AddShape);
             RemoveShapeCommand = new RelayCommand<IList>(RemoveShape, CanRemoveShape);
             AddLineCommand = new RelayCommand(AddLine);
@@ -62,6 +70,43 @@ namespace _02350AdvancedDemo.ViewModel
             MouseDownShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownShape);
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
+        }
+
+        public void NewDiagram()
+        {
+            Shapes = new ObservableCollection<Shape>();
+            RaisePropertyChanged(() => Shapes);
+            Lines = new ObservableCollection<Line>();
+            RaisePropertyChanged(() => Lines);
+        }
+
+        public void OpenDiagram()
+        {
+            OpenFileDialog loadDialog = new OpenFileDialog() { Title = "Open Diagram", Filter = "XML Document (.xml)|*.xml", DefaultExt = "xml", InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), CheckFileExists = true };
+            if (loadDialog.ShowDialog() == true)
+            {
+                string path = loadDialog.FileName;
+                Diagram diagram = SerializerXML.Instance.Deserialize(path);
+                // Reconstruct object graph.
+                diagram.Lines.ForEach(x => x.From = diagram.Shapes.Single(y => y.Number == x.FromNumber));
+                diagram.Lines.ForEach(x => x.To = diagram.Shapes.Single(y => y.Number == x.ToNumber));
+
+                Shapes = new ObservableCollection<Shape>(diagram.Shapes);
+                RaisePropertyChanged(() => Shapes);
+                Lines = new ObservableCollection<Line>(diagram.Lines);
+                RaisePropertyChanged(() => Lines);
+            }
+        }
+
+        public void SaveDiagram()
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog() { Title = "Save Diagram", Filter = "XML Document (.xml)|*.xml", DefaultExt = "xml", InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) };
+            if (saveDialog.ShowDialog() == true)
+            {
+                string path = saveDialog.FileName;
+                Diagram diagram = new Diagram() { Shapes = Shapes.ToList(), Lines = Lines.ToList() };
+                SerializerXML.Instance.Serialize(diagram, path);
+            }
         }
         
         public void AddShape()

@@ -6,27 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _02350AdvancedDemo.Command
+namespace _02350AdvancedDemo.UndoRedo
 {
-    public class AddLineCommand : IUndoRedoCommand
+    public class RemoveLinesCommand : IUndoRedoCommand
     {
         private ObservableCollection<Line> lines;
-        private Line line;
         
-        public AddLineCommand(ObservableCollection<Line> _lines, Line _line) 
-        { 
+        private List<Line> linesToRemove;
+        
+        public RemoveLinesCommand(ObservableCollection<Line> _lines, List<Line> _linesToRemove) 
+        {
             lines = _lines;
-            line = _line;
+            linesToRemove = _linesToRemove;
         }
         
         public void Execute()
         {
-            lines.Add(line);
+            linesToRemove.ForEach(x => lines.Remove(x));
         }
         
         public void UnExecute()
         {
-            lines.Remove(line);
+            linesToRemove.ForEach(x => lines.Add(x));
         }
     }
 }

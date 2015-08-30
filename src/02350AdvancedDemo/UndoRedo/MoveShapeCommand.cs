@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _02350AdvancedDemo.Command
+namespace _02350AdvancedDemo.UndoRedo
 {
     public class MoveShapeCommand : IUndoRedoCommand
     {

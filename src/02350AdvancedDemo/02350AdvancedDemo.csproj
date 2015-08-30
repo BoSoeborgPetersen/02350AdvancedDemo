@@ -77,13 +77,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command\AddLineCommand.cs" />
-    <Compile Include="Command\AddShapeCommand.cs" />
-    <Compile Include="Command\IUndoRedoCommand.cs" />
-    <Compile Include="Command\MoveShapeCommand.cs" />
-    <Compile Include="Command\RemoveLinesCommand.cs" />
-    <Compile Include="Command\RemoveShapesCommand.cs" />
-    <Compile Include="Command\UndoRedoController.cs" />
+    <Compile Include="Serialization\SerializerXML.cs" />
+    <Compile Include="UndoRedo\AddLineCommand.cs" />
+    <Compile Include="UndoRedo\AddShapeCommand.cs" />
+    <Compile Include="UndoRedo\IUndoRedoCommand.cs" />
+    <Compile Include="UndoRedo\MoveShapeCommand.cs" />
+    <Compile Include="UndoRedo\RemoveLinesCommand.cs" />
+    <Compile Include="UndoRedo\RemoveShapesCommand.cs" />
+    <Compile Include="UndoRedo\UndoRedoController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -278,6 +279,7 @@
     <Resource Include="Images\Exit.png" />
     <Resource Include="Images\Options.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
