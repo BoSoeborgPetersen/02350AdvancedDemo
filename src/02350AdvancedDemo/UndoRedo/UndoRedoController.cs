@@ -24,24 +24,32 @@ namespace _02350AdvancedDemo.UndoRedo
             command.Execute();
         }
 
-        public bool CanUndo() => undoStack.Any();
+        public bool CanUndo(string steps) => undoStack.Count() >= (steps == null ? 1 : int.Parse(steps));
 
-        public void Undo()
+        public void Undo(string steps)
         {
-            if (!undoStack.Any()) throw new InvalidOperationException();
-            IUndoRedoCommand command = undoStack.Pop();
-            redoStack.Push(command);
-            command.UnExecute();
+            if (!CanUndo(steps)) throw new InvalidOperationException();
+            int s = steps == null ? 1 : int.Parse(steps);
+            for (int i = 0; i < s; i++)
+            {
+                IUndoRedoCommand command = undoStack.Pop();
+                redoStack.Push(command);
+                command.UnExecute();
+            }
         }
 
-        public bool CanRedo() => redoStack.Any();
+        public bool CanRedo(string steps) => redoStack.Count() >= (steps == null ? 1 : int.Parse(steps));
 
-        public void Redo()
+        public void Redo(string steps)
         {
-            if (!redoStack.Any()) throw new InvalidOperationException();
-            IUndoRedoCommand command = redoStack.Pop();
-            undoStack.Push(command);
-            command.Execute();
+            if (!CanRedo(steps)) throw new InvalidOperationException();
+            int s = steps == null ? 1 : int.Parse(steps);
+            for(int i = 0; i < s; i++)
+            {
+                IUndoRedoCommand command = redoStack.Pop();
+                undoStack.Push(command);
+                command.Execute();
+            }
         }
     }
 }

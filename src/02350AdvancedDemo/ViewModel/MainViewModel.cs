@@ -24,9 +24,13 @@ namespace _02350AdvancedDemo.ViewModel
         private Shape addingLineFrom;
         private Point moveShapePoint;
         public double ModeOpacity => isAddingLine ? 0.4 : 1.0;
+        public Visibility SidePanelVisibility { get; set; } = Visibility.Visible;
+        public string SidePanelVisibilitySymbol { get; set; } = "<";
 
         public ObservableCollection<Shape> Shapes { get; set; }
         public ObservableCollection<Line> Lines { get; set; }
+
+        public ICommand ToggleSidePanelVisibilityCommand { get; set; }
 
         public ICommand NewDiagramCommand { get; }
         public ICommand OpenDiagramCommand { get; }
@@ -55,12 +59,14 @@ namespace _02350AdvancedDemo.ViewModel
                 new Line() { From = Shapes[0], To = Shapes[1] } 
             };
 
+            ToggleSidePanelVisibilityCommand = new RelayCommand(ToggleSidePanelVisibility);
+
             NewDiagramCommand = new RelayCommand(NewDiagram);
             OpenDiagramCommand = new RelayCommand(OpenDiagram);
             SaveDiagramCommand = new RelayCommand(SaveDiagram);
 
-            UndoCommand = new RelayCommand(undoRedoController.Undo, undoRedoController.CanUndo);
-            RedoCommand = new RelayCommand(undoRedoController.Redo, undoRedoController.CanRedo);
+            UndoCommand = new RelayCommand<string>(undoRedoController.Undo, undoRedoController.CanUndo);
+            RedoCommand = new RelayCommand<string>(undoRedoController.Redo, undoRedoController.CanRedo);
 
             AddShapeCommand = new RelayCommand(AddShape);
             RemoveShapeCommand = new RelayCommand<IList>(RemoveShape, CanRemoveShape);
@@ -72,12 +78,23 @@ namespace _02350AdvancedDemo.ViewModel
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
         }
 
+        public void ToggleSidePanelVisibility()
+        {
+            SidePanelVisibility = SidePanelVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+            RaisePropertyChanged(() => SidePanelVisibility);
+            SidePanelVisibilitySymbol = SidePanelVisibilitySymbol == "<" ? ">" : "<";
+            RaisePropertyChanged(() => SidePanelVisibilitySymbol);
+        }
+
         public void NewDiagram()
         {
-            Shapes = new ObservableCollection<Shape>();
-            RaisePropertyChanged(() => Shapes);
-            Lines = new ObservableCollection<Line>();
-            RaisePropertyChanged(() => Lines);
+            if(MessageBox.Show("Are you sure (bla bla)?", "Warning", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                Shapes = new ObservableCollection<Shape>();
+                RaisePropertyChanged(() => Shapes);
+                Lines = new ObservableCollection<Line>();
+                RaisePropertyChanged(() => Lines);
+            }
         }
 
         public void OpenDiagram()

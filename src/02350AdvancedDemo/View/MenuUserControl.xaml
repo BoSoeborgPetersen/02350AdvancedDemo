@@ -18,16 +18,16 @@
                 <RibbonButton ToolTip="Open Diagram" SmallImageSource="/Images/Open.png" Command="{Binding OpenDiagramCommand}"/>
                 <RibbonButton ToolTip="Save Diagram" SmallImageSource="/Images/Save.png" Command="{Binding SaveDiagramCommand}"/>
                 <RibbonSplitButton ToolTip="Undo" SmallImageSource="/Images/Undo.png" Command="{Binding UndoCommand}">
-                    <RibbonSplitMenuItem Header="Undo 2" ImageSource="/Images/Undo.png"/>
-                    <RibbonSplitMenuItem Header="Undo 3" ImageSource="/Images/Undo.png"/>
-                    <RibbonSplitMenuItem Header="Undo 4" ImageSource="/Images/Undo.png"/>
-                    <RibbonSplitMenuItem Header="Undo 5" ImageSource="/Images/Undo.png"/>
+                    <RibbonSplitMenuItem Header="Undo 2" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="2"/>
+                    <RibbonSplitMenuItem Header="Undo 3" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="3"/>
+                    <RibbonSplitMenuItem Header="Undo 4" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="4"/>
+                    <RibbonSplitMenuItem Header="Undo 5" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="5"/>
                 </RibbonSplitButton>
-                <RibbonSplitButton ToolTip="Redo" SmallImageSource="/Images/Redo.png" Command="{Binding RedoCommand}">
-                    <RibbonSplitMenuItem Header="Redo 2" ImageSource="/Images/Redo.png"/>
-                    <RibbonSplitMenuItem Header="Redo 3" ImageSource="/Images/Redo.png"/>
-                    <RibbonSplitMenuItem Header="Redo 4" ImageSource="/Images/Redo.png"/>
-                    <RibbonSplitMenuItem Header="Redo 5" ImageSource="/Images/Redo.png"/>
+                <RibbonSplitButton ToolTip="Redo" SmallImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="1">
+                    <RibbonSplitMenuItem Header="Redo 2" ImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="2"/>
+                    <RibbonSplitMenuItem Header="Redo 3" ImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="3"/>
+                    <RibbonSplitMenuItem Header="Redo 4" ImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="4"/>
+                    <RibbonSplitMenuItem Header="Redo 5" ImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="5"/>
                 </RibbonSplitButton>
                 <RibbonButton ToolTip="Cut" SmallImageSource="/Images/Cut.png" />
                 <RibbonButton ToolTip="Copy" SmallImageSource="/Images/Copy.png" />
@@ -62,18 +62,18 @@
             <!-- Undo/Redo group-->
             <RibbonGroup Header="Undo/Redo">
                 <RibbonMenuButton LargeImageSource="/Images/Undo.png" Label="Undo" KeyTip="Z">
-                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 1" Command="{Binding UndoCommand}"/>
-                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 2"/>
-                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 3"/>
-                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 4"/>
-                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 5"/>
+                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 1" Command="{Binding UndoCommand}" CommandParameter="1"/>
+                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 2" Command="{Binding UndoCommand}" CommandParameter="2"/>
+                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 3" Command="{Binding UndoCommand}" CommandParameter="3"/>
+                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 4" Command="{Binding UndoCommand}" CommandParameter="4"/>
+                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 5" Command="{Binding UndoCommand}" CommandParameter="5"/>
                 </RibbonMenuButton>
                 <RibbonMenuButton LargeImageSource="/Images/Redo.png" Label="Redo" KeyTip="Y">
-                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 1" Command="{Binding RedoCommand}"/>
-                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 2"/>
-                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 3"/>
-                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 4"/>
-                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 5"/>
+                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 1" Command="{Binding RedoCommand}" CommandParameter="1"/>
+                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 2" Command="{Binding RedoCommand}" CommandParameter="2"/>
+                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 3" Command="{Binding RedoCommand}" CommandParameter="3"/>
+                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 4" Command="{Binding RedoCommand}" CommandParameter="4"/>
+                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 5" Command="{Binding RedoCommand}" CommandParameter="5"/>
                 </RibbonMenuButton>
             </RibbonGroup>
             <!-- Copy/Paste group-->

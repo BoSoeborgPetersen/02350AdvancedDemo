@@ -4,13 +4,35 @@
         xmlns:ViewModel="clr-namespace:_02350AdvancedDemo.ViewModel"
         xmlns:View="clr-namespace:_02350AdvancedDemo.View"
         Title="02350 Advanced Demo" Height="600" Width="800">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding NewDiagramCommand}" Gesture="CTRL+N"/>
+        <KeyBinding Command="{Binding OpenDiagramCommand}" Gesture="CTRL+O"/>
+        <KeyBinding Command="{Binding SaveDiagramCommand}" Gesture="CTRL+S"/>
+        <KeyBinding Command="{Binding UndoCommand}" Gesture="CTRL+Z"/>
+        <KeyBinding Command="{Binding RedoCommand}" Gesture="CTRL+Y"/>
+    </Window.InputBindings>
     <Window.DataContext>
         <ViewModel:MainViewModel />
     </Window.DataContext>
     <DockPanel>
         <View:Menu DockPanel.Dock="Top"/>
         <View:SidePanelUserControl/>
+        <StackPanel DockPanel.Dock="Bottom">
+            <Slider x:Name="zoomSlider" ToolTip="Zoom" Value="1" Minimum="0.1" Maximum="10"/>
+        </StackPanel>
         <Grid>
+            <Grid.Background>
+                <VisualBrush TileMode="Tile"
+                             Viewport="0,0,40,40" ViewportUnits="Absolute" 
+                             Viewbox="0,0,40,40" ViewboxUnits="Absolute">
+                    <VisualBrush.Visual>
+                        <Rectangle Stroke="Black" StrokeThickness="0.05" Height="40" Width="40"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Grid.Background>
+            <Grid.LayoutTransform>
+                <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=zoomSlider, Path=Value}" ScaleY="{Binding ElementName=zoomSlider, Path=Value}"/>
+            </Grid.LayoutTransform>
             <ItemsControl ItemsSource="{Binding Lines}"/>
             <ItemsControl ItemsSource="{Binding Shapes}"/>
         </Grid>
