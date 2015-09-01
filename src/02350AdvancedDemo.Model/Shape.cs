@@ -22,7 +22,7 @@ namespace _02350AdvancedDemo.Model
         public int Width { get; set; } = 100;
         public int Height { get; set; } = 100;
 
-        public string[] Data { get; set; }
+        public List<string> Data { get; set; }
         
         [XmlIgnore]
         public int CanvasCenterX { get { return X + Width / 2; } set { X = value - Width / 2; } }

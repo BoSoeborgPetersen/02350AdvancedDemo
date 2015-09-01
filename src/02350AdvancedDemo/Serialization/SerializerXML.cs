@@ -29,7 +29,13 @@ namespace _02350AdvancedDemo.Serialization
             using (FileStream stream = File.OpenRead(path))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Diagram));
-                return serializer.Deserialize(stream) as Diagram;
+                Diagram diagram = serializer.Deserialize(stream) as Diagram;
+
+                // Reconstruct object graph.
+                diagram.Lines.ForEach(x => x.From = diagram.Shapes.Single(y => y.Number == x.FromNumber));
+                diagram.Lines.ForEach(x => x.To = diagram.Shapes.Single(y => y.Number == x.ToNumber));
+
+                return diagram;
             }
         }
     }

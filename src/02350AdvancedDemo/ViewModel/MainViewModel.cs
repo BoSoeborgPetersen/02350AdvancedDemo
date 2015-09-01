@@ -3,7 +3,6 @@ using _02350AdvancedDemo.Serialization;
 using _02350AdvancedDemo.UndoRedo;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
-using Microsoft.Win32;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +18,7 @@ namespace _02350AdvancedDemo.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private UndoRedoController undoRedoController = UndoRedoController.GetInstance();
+        private DialogViewModel dialogVM = new DialogViewModel();
         
         private bool isAddingLine;
         private Type addingLineType;
@@ -54,8 +54,8 @@ namespace _02350AdvancedDemo.ViewModel
         public MainViewModel()
         {
             Shapes = new ObservableCollection<Shape>() {
-                new Circle() { X = 30, Y = 40, Width = 80, Height = 80, Data = new string[] { "text1", "text2", "text3" } },
-                new Square() { X = 140, Y = 230, Width = 200, Height = 100, Data = new string[] { "text1", "text2", "text3" } }
+                new Circle() { X = 30, Y = 40, Width = 80, Height = 80, Data = new List<string> { "text1", "text2", "text3" } },
+                new Square() { X = 140, Y = 230, Width = 200, Height = 100, Data = new List<string> { "text1", "text2", "text3" } }
             };
 
             Lines = new ObservableCollection<Line>() { 
@@ -93,7 +93,7 @@ namespace _02350AdvancedDemo.ViewModel
 
         private void NewDiagram()
         {
-            if(MessageBox.Show("Are you sure (bla bla)?", "Warning", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if(dialogVM.ShowNew())
             {
                 Shapes = new ObservableCollection<Shape>();
                 RaisePropertyChanged(() => Shapes);
@@ -104,14 +104,10 @@ namespace _02350AdvancedDemo.ViewModel
 
         private void OpenDiagram()
         {
-            OpenFileDialog loadDialog = new OpenFileDialog() { Title = "Open Diagram", Filter = "XML Document (.xml)|*.xml", DefaultExt = "xml", InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), CheckFileExists = true };
-            if (loadDialog.ShowDialog() == true)
+            string path = dialogVM.ShowOpen();
+            if (path != null)
             {
-                string path = loadDialog.FileName;
                 Diagram diagram = SerializerXML.Instance.Deserialize(path);
-                // Reconstruct object graph.
-                diagram.Lines.ForEach(x => x.From = diagram.Shapes.Single(y => y.Number == x.FromNumber));
-                diagram.Lines.ForEach(x => x.To = diagram.Shapes.Single(y => y.Number == x.ToNumber));
 
                 Shapes = new ObservableCollection<Shape>(diagram.Shapes);
                 RaisePropertyChanged(() => Shapes);
@@ -122,10 +118,9 @@ namespace _02350AdvancedDemo.ViewModel
 
         private void SaveDiagram()
         {
-            SaveFileDialog saveDialog = new SaveFileDialog() { Title = "Save Diagram", Filter = "XML Document (.xml)|*.xml", DefaultExt = "xml", InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) };
-            if (saveDialog.ShowDialog() == true)
+            string path = dialogVM.ShowSave();
+            if (path != null)
             {
-                string path = saveDialog.FileName;
                 Diagram diagram = new Diagram() { Shapes = Shapes.ToList(), Lines = Lines.ToList() };
                 SerializerXML.Instance.Serialize(diagram, path);
             }
@@ -152,14 +147,14 @@ namespace _02350AdvancedDemo.ViewModel
         {
             isAddingLine = true;
             addingLineType = typeof(Line);
-            RaisePropertyChanged("ModeOpacity");
+            RaisePropertyChanged(() => ModeOpacity);
         }
 
         private void AddDashLine()
         {
             isAddingLine = true;
             addingLineType = typeof(DashLine);
-            RaisePropertyChanged("ModeOpacity");
+            RaisePropertyChanged(() => ModeOpacity);
         }
 
         private bool CanRemoveLines(IList _edges) => _edges.Count >= 1;
@@ -204,7 +199,7 @@ namespace _02350AdvancedDemo.ViewModel
                     isAddingLine = false;
                     addingLineType = null;
                     addingLineFrom = null;
-                    RaisePropertyChanged("ModeOpacity");
+                    RaisePropertyChanged(() => ModeOpacity);
                 }
             }
             else
