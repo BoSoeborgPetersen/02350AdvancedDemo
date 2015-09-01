@@ -25,9 +25,14 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Themes/ShinyBlue.xaml"/>
                 <ResourceDictionary>
-                    <DataTemplate DataType="{x:Type Model:Shape}">
+                    <DataTemplate DataType="{x:Type Model:Circle}">
                         <Canvas>
-                            <View:ShapeUserControl/>
+                            <View:CircleUserControl/>
+                        </Canvas>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type Model:Square}">
+                        <Canvas>
+                            <View:SquareUserControl/>
                         </Canvas>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type Model:Line}">

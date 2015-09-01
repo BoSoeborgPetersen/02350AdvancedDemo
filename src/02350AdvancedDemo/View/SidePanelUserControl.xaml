@@ -10,7 +10,8 @@
         <StackPanel Width="240" Visibility="{Binding SidePanelVisibility}">
             <GroupBox Header="Shapes">
                 <StackPanel>
-                    <Button Content="Add shape" Command="{Binding AddShapeCommand}"/>
+                    <Button Content="Add Circle" Command="{Binding AddCircleCommand}"/>
+                    <Button Content="Add Square" Command="{Binding AddSquareCommand}"/>
                     <DataGrid x:Name="shapesControl" Height="140" ItemsSource="{Binding Shapes}" HeadersVisibility="Column" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Number}" Header="Number" Width="*" IsReadOnly="True"/>
@@ -26,6 +27,7 @@
             <GroupBox Header="Lines">
                 <StackPanel>
                     <Button Content="Add line" Command="{Binding AddLineCommand}"/>
+                    <Button Content="Add dash line" Command="{Binding AddDashLineCommand}"/>
                     <DataGrid x:Name="linesControl" Height="140" ItemsSource="{Binding Lines}" HeadersVisibility="Column" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Header="From" DisplayMemberPath="." Width="*" SelectedItemBinding="{Binding From, UpdateSourceTrigger=PropertyChanged}">

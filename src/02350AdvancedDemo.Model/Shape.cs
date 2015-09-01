@@ -9,8 +9,10 @@ using System.Xml.Serialization;
 
 namespace _02350AdvancedDemo.Model
 {
+    [XmlInclude(typeof(Circle))]
+    [XmlInclude(typeof(Square))]
     [ImplementPropertyChanged]
-    public class Shape
+    public abstract class Shape
     {
         private static int counter = 0;
         public int Number { get; set; } = ++counter;
@@ -19,6 +21,8 @@ namespace _02350AdvancedDemo.Model
         public int Y { get; set; } = 200;
         public int Width { get; set; } = 100;
         public int Height { get; set; } = 100;
+
+        public string[] Data { get; set; }
         
         [XmlIgnore]
         public int CanvasCenterX { get { return X + Width / 2; } set { X = value - Width / 2; } }

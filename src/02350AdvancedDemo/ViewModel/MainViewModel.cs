@@ -21,6 +21,7 @@ namespace _02350AdvancedDemo.ViewModel
         private UndoRedoController undoRedoController = UndoRedoController.GetInstance();
         
         private bool isAddingLine;
+        private Type addingLineType;
         private Shape addingLineFrom;
         private Point moveShapePoint;
         public double ModeOpacity => isAddingLine ? 0.4 : 1.0;
@@ -39,9 +40,11 @@ namespace _02350AdvancedDemo.ViewModel
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
 
-        public ICommand AddShapeCommand { get; }
+        public ICommand AddCircleCommand { get; }
+        public ICommand AddSquareCommand { get; }
         public ICommand RemoveShapeCommand { get; }
         public ICommand AddLineCommand { get; }
+        public ICommand AddDashLineCommand { get; }
         public ICommand RemoveLinesCommand { get; }
         
         public ICommand MouseDownShapeCommand { get; }
@@ -50,13 +53,13 @@ namespace _02350AdvancedDemo.ViewModel
 
         public MainViewModel()
         {
-            Shapes = new ObservableCollection<Shape>() { 
-                new Shape() { X = 30, Y = 40, Width = 50, Height = 50 }, 
-                new Shape() { X = 140, Y = 230, Width = 200, Height = 200 } 
+            Shapes = new ObservableCollection<Shape>() {
+                new Circle() { X = 30, Y = 40, Width = 80, Height = 80, Data = new string[] { "text1", "text2", "text3" } },
+                new Square() { X = 140, Y = 230, Width = 200, Height = 100, Data = new string[] { "text1", "text2", "text3" } }
             };
 
             Lines = new ObservableCollection<Line>() { 
-                new Line() { From = Shapes[0], To = Shapes[1] } 
+                new Line() { From = Shapes[0], To = Shapes[1], Label = "Line Text" } 
             };
 
             ToggleSidePanelVisibilityCommand = new RelayCommand(ToggleSidePanelVisibility);
@@ -68,9 +71,11 @@ namespace _02350AdvancedDemo.ViewModel
             UndoCommand = new RelayCommand<string>(undoRedoController.Undo, undoRedoController.CanUndo);
             RedoCommand = new RelayCommand<string>(undoRedoController.Redo, undoRedoController.CanRedo);
 
-            AddShapeCommand = new RelayCommand(AddShape);
+            AddCircleCommand = new RelayCommand(AddCircle);
+            AddSquareCommand = new RelayCommand(AddSquare);
             RemoveShapeCommand = new RelayCommand<IList>(RemoveShape, CanRemoveShape);
             AddLineCommand = new RelayCommand(AddLine);
+            AddDashLineCommand = new RelayCommand(AddDashLine);
             RemoveLinesCommand = new RelayCommand<IList>(RemoveLines, CanRemoveLines);
             
             MouseDownShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownShape);
@@ -126,9 +131,14 @@ namespace _02350AdvancedDemo.ViewModel
             }
         }
         
-        public void AddShape()
+        public void AddCircle()
         {
-            undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new Shape()));
+            undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new Circle()));
+        }
+
+        public void AddSquare()
+        {
+            undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new Square()));
         }
 
         public bool CanRemoveShape(IList _shapes) => _shapes.Count == 1;
@@ -141,6 +151,14 @@ namespace _02350AdvancedDemo.ViewModel
         public void AddLine()
         {
             isAddingLine = true;
+            addingLineType = typeof(Line);
+            RaisePropertyChanged("ModeOpacity");
+        }
+
+        public void AddDashLine()
+        {
+            isAddingLine = true;
+            addingLineType = typeof(DashLine);
             RaisePropertyChanged("ModeOpacity");
         }
 
@@ -179,9 +197,12 @@ namespace _02350AdvancedDemo.ViewModel
                 if (addingLineFrom == null) { addingLineFrom = shape; addingLineFrom.IsSelected = true; }
                 else if (addingLineFrom.Number != shape.Number)
                 {
-                    undoRedoController.AddAndExecute(new AddLineCommand(Lines, new Line() { From = addingLineFrom, To = shape }));
+                    Line lineToAdd = addingLineType == typeof(Line) ? new Line() { From = addingLineFrom, To = shape } :
+                        addingLineType == typeof(DashLine) ? new DashLine() { From = addingLineFrom, To = shape } : null;
+                    undoRedoController.AddAndExecute(new AddLineCommand(Lines, lineToAdd));
                     addingLineFrom.IsSelected = false;
                     isAddingLine = false;
+                    addingLineType = null;
                     addingLineFrom = null;
                     RaisePropertyChanged("ModeOpacity");
                 }

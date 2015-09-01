@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="_02350AdvancedDemo.View.ShapeUserControl"
+﻿<UserControl x:Class="_02350AdvancedDemo.View.SquareUserControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -21,26 +21,14 @@
             <TextBlock Grid.Row="1" Text="Choose" TextAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="3" Text="by clicking" TextAlignment="Center" FontWeight="Bold"/>
         </Grid>
-        <Ellipse Opacity="{Binding DataContext.ModeOpacity, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Stroke="Purple" StrokeThickness="6" StrokeDashArray="3.1">
-            <Ellipse.Fill>
+        <Rectangle Opacity="{Binding DataContext.ModeOpacity, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Stroke="Purple" StrokeThickness="6" StrokeDashArray="3.1">
+            <Rectangle.Fill>
                 <RadialGradientBrush>
                     <GradientStop Color="CornflowerBlue" Offset="0.0" />
                     <GradientStop  Color="Blue" Offset="0.60" />
                     <GradientStop Color="Navy" Offset="0.90" />
                 </RadialGradientBrush>
-            </Ellipse.Fill>
-            <Ellipse.RenderTransform>
-                <RotateTransform CenterX="{Binding CenterX}" CenterY="{Binding CenterY}"/>
-            </Ellipse.RenderTransform>
-            <Ellipse.Triggers>
-                <EventTrigger RoutedEvent="Ellipse.Loaded">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation Storyboard.TargetProperty="RenderTransform.Angle" From="0" To="360" Duration="0:0:7" RepeatBehavior="Forever" />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>
-            </Ellipse.Triggers>
+            </Rectangle.Fill>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDown">
                     <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
@@ -52,7 +40,21 @@
                     <cmd:EventToCommand Command="{Binding DataContext.MouseUpShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-        </Ellipse>
-        <TextBlock IsHitTestVisible="False" FontSize="20" Text="{Binding Number}" TextAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+        </Rectangle>
+        <ListBox ItemsSource="{Binding Data}" Margin="10, 30, 10, 10" Opacity="{Binding DataContext.ModeOpacity, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <UniformGrid Columns="1">
+                        <TextBox Text="{Binding .}"/>
+                    </UniformGrid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBlock IsHitTestVisible="False" FontSize="20" Text="{Binding Number}" TextAlignment="Center" VerticalAlignment="Top" Foreground="White" Margin="0, 4, 0, 0"/>
     </Grid>
 </UserControl>
