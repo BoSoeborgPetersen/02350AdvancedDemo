@@ -83,7 +83,7 @@ namespace _02350AdvancedDemo.ViewModel
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
         }
 
-        public void ToggleSidePanelVisibility()
+        private void ToggleSidePanelVisibility()
         {
             SidePanelVisibility = SidePanelVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
             RaisePropertyChanged(() => SidePanelVisibility);
@@ -91,7 +91,7 @@ namespace _02350AdvancedDemo.ViewModel
             RaisePropertyChanged(() => SidePanelVisibilitySymbol);
         }
 
-        public void NewDiagram()
+        private void NewDiagram()
         {
             if(MessageBox.Show("Are you sure (bla bla)?", "Warning", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
@@ -102,7 +102,7 @@ namespace _02350AdvancedDemo.ViewModel
             }
         }
 
-        public void OpenDiagram()
+        private void OpenDiagram()
         {
             OpenFileDialog loadDialog = new OpenFileDialog() { Title = "Open Diagram", Filter = "XML Document (.xml)|*.xml", DefaultExt = "xml", InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), CheckFileExists = true };
             if (loadDialog.ShowDialog() == true)
@@ -120,7 +120,7 @@ namespace _02350AdvancedDemo.ViewModel
             }
         }
 
-        public void SaveDiagram()
+        private void SaveDiagram()
         {
             SaveFileDialog saveDialog = new SaveFileDialog() { Title = "Save Diagram", Filter = "XML Document (.xml)|*.xml", DefaultExt = "xml", InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) };
             if (saveDialog.ShowDialog() == true)
@@ -130,51 +130,51 @@ namespace _02350AdvancedDemo.ViewModel
                 SerializerXML.Instance.Serialize(diagram, path);
             }
         }
-        
-        public void AddCircle()
+
+        private void AddCircle()
         {
             undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new Circle()));
         }
 
-        public void AddSquare()
+        private void AddSquare()
         {
             undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new Square()));
         }
 
-        public bool CanRemoveShape(IList _shapes) => _shapes.Count == 1;
+        private bool CanRemoveShape(IList _shapes) => _shapes.Count == 1;
 
-        public void RemoveShape(IList _shapes)
+        private void RemoveShape(IList _shapes)
         {
             undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, _shapes.Cast<Shape>().ToList()));
         }
 
-        public void AddLine()
+        private void AddLine()
         {
             isAddingLine = true;
             addingLineType = typeof(Line);
             RaisePropertyChanged("ModeOpacity");
         }
 
-        public void AddDashLine()
+        private void AddDashLine()
         {
             isAddingLine = true;
             addingLineType = typeof(DashLine);
             RaisePropertyChanged("ModeOpacity");
         }
 
-        public bool CanRemoveLines(IList _edges) => _edges.Count >= 1;
+        private bool CanRemoveLines(IList _edges) => _edges.Count >= 1;
 
-        public void RemoveLines(IList _lines)
+        private void RemoveLines(IList _lines)
         {
             undoRedoController.AddAndExecute(new RemoveLinesCommand(Lines, _lines.Cast<Line>().ToList()));
         }
-        
-        public void MouseDownShape(MouseButtonEventArgs e)
+
+        private void MouseDownShape(MouseButtonEventArgs e)
         {
             if (!isAddingLine) e.MouseDevice.Target.CaptureMouse();
         }
-        
-        public void MouseMoveShape(MouseEventArgs e)
+
+        private void MouseMoveShape(MouseEventArgs e)
         {
             if (Mouse.Captured != null && !isAddingLine)
             {
@@ -188,7 +188,7 @@ namespace _02350AdvancedDemo.ViewModel
             }
         }
 
-        public void MouseUpShape(MouseButtonEventArgs e)
+        private void MouseUpShape(MouseButtonEventArgs e)
         {
             if (isAddingLine)
             {
