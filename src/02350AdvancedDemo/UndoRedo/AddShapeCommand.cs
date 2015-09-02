@@ -19,7 +19,6 @@ namespace _02350AdvancedDemo.UndoRedo
             shape = _shape;
         }
 
-        // Methods.
         public void Execute()
         {
             shapes.Add(shape);
