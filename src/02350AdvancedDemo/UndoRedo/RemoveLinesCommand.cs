@@ -1,4 +1,4 @@
-﻿using _02350AdvancedDemo.Model;
+﻿using _02350AdvancedDemo.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,11 +10,11 @@ namespace _02350AdvancedDemo.UndoRedo
 {
     public class RemoveLinesCommand : IUndoRedoCommand
     {
-        private ObservableCollection<Line> lines;
+        private ObservableCollection<LineViewModel> lines;
         
-        private List<Line> linesToRemove;
+        private List<LineViewModel> linesToRemove;
         
-        public RemoveLinesCommand(ObservableCollection<Line> _lines, List<Line> _linesToRemove) 
+        public RemoveLinesCommand(ObservableCollection<LineViewModel> _lines, List<LineViewModel> _linesToRemove) 
         {
             lines = _lines;
             linesToRemove = _linesToRemove;

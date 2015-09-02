@@ -9,10 +9,7 @@ using System.Xml.Serialization;
 
 namespace _02350AdvancedDemo.Model
 {
-    [ImplementPropertyChanged]
     public class DashLine : Line
     {
-        [XmlIgnore]
-        public override DoubleCollection DashLength => new DoubleCollection() { 2 };
     }
 }

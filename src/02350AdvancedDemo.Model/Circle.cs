@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace _02350AdvancedDemo.Model
 {
-    [ImplementPropertyChanged]
     public class Circle : Shape
     {
     }

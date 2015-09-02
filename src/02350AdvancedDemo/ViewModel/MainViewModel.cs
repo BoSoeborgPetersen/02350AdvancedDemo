@@ -22,14 +22,14 @@ namespace _02350AdvancedDemo.ViewModel
         
         private bool isAddingLine;
         private Type addingLineType;
-        private Shape addingLineFrom;
+        private ShapeViewModel addingLineFrom;
         private Point moveShapePoint;
         public double ModeOpacity => isAddingLine ? 0.4 : 1.0;
         public Visibility SidePanelVisibility { get; set; } = Visibility.Visible;
         public string SidePanelVisibilitySymbol { get; set; } = "<";
 
-        public ObservableCollection<Shape> Shapes { get; set; }
-        public ObservableCollection<Line> Lines { get; set; }
+        public ObservableCollection<ShapeViewModel> Shapes { get; set; }
+        public ObservableCollection<LineViewModel> Lines { get; set; }
 
         public ICommand ToggleSidePanelVisibilityCommand { get; set; }
 
@@ -53,13 +53,13 @@ namespace _02350AdvancedDemo.ViewModel
 
         public MainViewModel()
         {
-            Shapes = new ObservableCollection<Shape>() {
-                new Circle() { X = 30, Y = 40, Width = 80, Height = 80, Data = new List<string> { "text1", "text2", "text3" } },
-                new Square() { X = 140, Y = 230, Width = 200, Height = 100, Data = new List<string> { "text1", "text2", "text3" } }
+            Shapes = new ObservableCollection<ShapeViewModel>() {
+                new CircleViewModel(new Circle() { X = 30, Y = 40, Width = 80, Height = 80, Data = new List<string> { "text1", "text2", "text3" } }),
+                new SquareViewModel(new Square() { X = 140, Y = 230, Width = 200, Height = 100, Data = new List<string> { "text1", "text2", "text3" } })
             };
 
-            Lines = new ObservableCollection<Line>() { 
-                new Line() { From = Shapes[0], To = Shapes[1], Label = "Line Text" } 
+            Lines = new ObservableCollection<LineViewModel>() {
+                new LineViewModel(new Line() {  Label = "Line Text" }) { From = Shapes[0], To = Shapes[1] }
             };
 
             ToggleSidePanelVisibilityCommand = new RelayCommand(ToggleSidePanelVisibility);
@@ -95,9 +95,9 @@ namespace _02350AdvancedDemo.ViewModel
         {
             if(dialogVM.ShowNew())
             {
-                Shapes = new ObservableCollection<Shape>();
+                Shapes = new ObservableCollection<ShapeViewModel>();
                 RaisePropertyChanged(() => Shapes);
-                Lines = new ObservableCollection<Line>();
+                Lines = new ObservableCollection<LineViewModel>();
                 RaisePropertyChanged(() => Lines);
             }
         }
@@ -109,9 +109,17 @@ namespace _02350AdvancedDemo.ViewModel
             {
                 Diagram diagram = SerializerXML.Instance.Deserialize(path);
 
-                Shapes = new ObservableCollection<Shape>(diagram.Shapes);
+                Shapes = new ObservableCollection<ShapeViewModel>(diagram.Shapes.Select(x => x is Circle ? (ShapeViewModel) new CircleViewModel(x) : new SquareViewModel(x)));
+                Lines = new ObservableCollection<LineViewModel>(diagram.Lines.Select(x => new LineViewModel(x)));
+
+                // Reconstruct object graph.
+                foreach(LineViewModel line in Lines)
+                {
+                    line.From = Shapes.Single(s => s.Number == line.Line.FromNumber);
+                    line.To = Shapes.Single(s => s.Number == line.Line.ToNumber);
+                }
+
                 RaisePropertyChanged(() => Shapes);
-                Lines = new ObservableCollection<Line>(diagram.Lines);
                 RaisePropertyChanged(() => Lines);
             }
         }
@@ -121,26 +129,26 @@ namespace _02350AdvancedDemo.ViewModel
             string path = dialogVM.ShowSave();
             if (path != null)
             {
-                Diagram diagram = new Diagram() { Shapes = Shapes.ToList(), Lines = Lines.ToList() };
+                Diagram diagram = new Diagram() { Shapes = Shapes.Select(x => x.Shape).ToList(), Lines = Lines.Select(x => x.Line).ToList() };
                 SerializerXML.Instance.Serialize(diagram, path);
             }
         }
 
         private void AddCircle()
         {
-            undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new Circle()));
+            undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new CircleViewModel(new Circle())));
         }
 
         private void AddSquare()
         {
-            undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new Square()));
+            undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new SquareViewModel(new Square())));
         }
 
         private bool CanRemoveShape(IList _shapes) => _shapes.Count == 1;
 
         private void RemoveShape(IList _shapes)
         {
-            undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, _shapes.Cast<Shape>().ToList()));
+            undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, _shapes.Cast<ShapeViewModel>().ToList()));
         }
 
         private void AddLine()
@@ -161,7 +169,7 @@ namespace _02350AdvancedDemo.ViewModel
 
         private void RemoveLines(IList _lines)
         {
-            undoRedoController.AddAndExecute(new RemoveLinesCommand(Lines, _lines.Cast<Line>().ToList()));
+            undoRedoController.AddAndExecute(new RemoveLinesCommand(Lines, _lines.Cast<LineViewModel>().ToList()));
         }
 
         private void MouseDownShape(MouseButtonEventArgs e)
@@ -174,7 +182,7 @@ namespace _02350AdvancedDemo.ViewModel
             if (Mouse.Captured != null && !isAddingLine)
             {
                 FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                Shape shapeModel = (Shape)shapeVisualElement.DataContext;
+                ShapeViewModel shapeModel = (ShapeViewModel)shapeVisualElement.DataContext;
                 Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
                 Point mousePosition = Mouse.GetPosition(canvas);
                 if (moveShapePoint == default(Point)) moveShapePoint = mousePosition;
@@ -188,12 +196,14 @@ namespace _02350AdvancedDemo.ViewModel
             if (isAddingLine)
             {
                 FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                Shape shape = (Shape)shapeVisualElement.DataContext;
+                ShapeViewModel shape = (ShapeViewModel)shapeVisualElement.DataContext;
                 if (addingLineFrom == null) { addingLineFrom = shape; addingLineFrom.IsSelected = true; }
                 else if (addingLineFrom.Number != shape.Number)
                 {
-                    Line lineToAdd = addingLineType == typeof(Line) ? new Line() { From = addingLineFrom, To = shape } :
-                        addingLineType == typeof(DashLine) ? new DashLine() { From = addingLineFrom, To = shape } : null;
+                    LineViewModel lineToAdd = new LineViewModel(
+                        addingLineType == typeof(Line) ? new Line() :
+                        new DashLine()
+                    ){ From = addingLineFrom, To = shape };
                     undoRedoController.AddAndExecute(new AddLineCommand(Lines, lineToAdd));
                     addingLineFrom.IsSelected = false;
                     isAddingLine = false;
@@ -205,7 +215,7 @@ namespace _02350AdvancedDemo.ViewModel
             else
             {
                 FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                Shape shape = (Shape)shapeVisualElement.DataContext;
+                ShapeViewModel shape = (ShapeViewModel)shapeVisualElement.DataContext;
                 Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
                 Point mousePosition = Mouse.GetPosition(canvas);
                 undoRedoController.AddAndExecute(new MoveShapeCommand(shape, (int)moveShapePoint.X, (int)moveShapePoint.Y, (int)mousePosition.X, (int)mousePosition.Y));

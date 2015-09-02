@@ -16,7 +16,7 @@ namespace _02350AdvancedDemo.ViewModel
         public bool ShowNew() => 
             MessageBox.Show("Are you sure (bla bla)?", "Warning", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
 
-        public string ShowOpen() => openDialog.ShowDialog() == true ? saveDialog.FileName : null;
+        public string ShowOpen() => openDialog.ShowDialog() == true ? openDialog.FileName : null;
 
         public string ShowSave() => saveDialog.ShowDialog() == true ? saveDialog.FileName : null;
     }

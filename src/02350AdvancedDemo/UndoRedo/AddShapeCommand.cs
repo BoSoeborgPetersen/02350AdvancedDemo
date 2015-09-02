@@ -1,4 +1,4 @@
-﻿using _02350AdvancedDemo.Model;
+﻿using _02350AdvancedDemo.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,10 +10,10 @@ namespace _02350AdvancedDemo.UndoRedo
 {
     public class AddShapeCommand : IUndoRedoCommand
     {
-        private ObservableCollection<Shape> shapes;
-        private Shape shape;
+        private ObservableCollection<ShapeViewModel> shapes;
+        private ShapeViewModel shape;
 
-        public AddShapeCommand(ObservableCollection<Shape> _shapes, Shape _shape) 
+        public AddShapeCommand(ObservableCollection<ShapeViewModel> _shapes, ShapeViewModel _shape) 
         { 
             shapes = _shapes;
             shape = _shape;

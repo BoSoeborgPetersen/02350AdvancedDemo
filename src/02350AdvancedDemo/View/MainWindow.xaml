@@ -1,4 +1,4 @@
-﻿<Window x:Class="_02350AdvancedDemo.View.MainWindow"
+﻿<RibbonWindow x:Class="_02350AdvancedDemo.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ViewModel="clr-namespace:_02350AdvancedDemo.ViewModel"
@@ -37,4 +37,4 @@
             <ItemsControl ItemsSource="{Binding Shapes}"/>
         </Grid>
     </DockPanel>
-</Window>
+</RibbonWindow>

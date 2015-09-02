@@ -1,4 +1,4 @@
-﻿using _02350AdvancedDemo.Model;
+﻿using _02350AdvancedDemo.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,14 +10,14 @@ namespace _02350AdvancedDemo.UndoRedo
 {
     public class RemoveShapesCommand : IUndoRedoCommand
     {
-        private ObservableCollection<Shape> shapes;
+        private ObservableCollection<ShapeViewModel> shapes;
 
-        private ObservableCollection<Line> lines;
+        private ObservableCollection<LineViewModel> lines;
         
-        private List<Shape> shapesToRemove;
+        private List<ShapeViewModel> shapesToRemove;
         
-        private List<Line> linesToRemove;
-        public RemoveShapesCommand(ObservableCollection<Shape> _shapes, ObservableCollection<Line> _lines, List<Shape> _shapesToRemove)
+        private List<LineViewModel> linesToRemove;
+        public RemoveShapesCommand(ObservableCollection<ShapeViewModel> _shapes, ObservableCollection<LineViewModel> _lines, List<ShapeViewModel> _shapesToRemove)
         {
             shapes = _shapes;
             lines = _lines;
