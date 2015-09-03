@@ -23,15 +23,21 @@ namespace _02350AdvancedDemo.ViewModel
         private bool isAddingLine;
         private Type addingLineType;
         private ShapeViewModel addingLineFrom;
-        private Point moveShapePoint;
+
+        private Point movePoint;
+        private Dictionary<int, Point> moveOriginalPositions = new Dictionary<int, Point>();
+
+        private Point SelectionBoxStart;
+
+        public double SelectionBoxX { get; set; }
+        public double SelectionBoxY { get; set; }
+        public double SelectionBoxWidth { get; set; }
+        public double SelectionBoxHeight { get; set; }
+
         public double ModeOpacity => isAddingLine ? 0.4 : 1.0;
-        public Visibility SidePanelVisibility { get; set; } = Visibility.Visible;
-        public string SidePanelVisibilitySymbol { get; set; } = "<";
 
         public ObservableCollection<ShapeViewModel> Shapes { get; set; }
         public ObservableCollection<LineViewModel> Lines { get; set; }
-
-        public ICommand ToggleSidePanelVisibilityCommand { get; set; }
 
         public ICommand NewDiagramCommand { get; }
         public ICommand OpenDiagramCommand { get; }
@@ -51,6 +57,10 @@ namespace _02350AdvancedDemo.ViewModel
         public ICommand MouseMoveShapeCommand { get; }
         public ICommand MouseUpShapeCommand { get; }
 
+        public ICommand MouseDownCanvasCommand { get; }
+        public ICommand MouseMoveCanvasCommand { get; }
+        public ICommand MouseUpCanvasCommand { get; }
+
         public MainViewModel()
         {
             Shapes = new ObservableCollection<ShapeViewModel>() {
@@ -61,8 +71,6 @@ namespace _02350AdvancedDemo.ViewModel
             Lines = new ObservableCollection<LineViewModel>() {
                 new LineViewModel(new Line() {  Label = "Line Text" }) { From = Shapes[0], To = Shapes[1] }
             };
-
-            ToggleSidePanelVisibilityCommand = new RelayCommand(ToggleSidePanelVisibility);
 
             NewDiagramCommand = new RelayCommand(NewDiagram);
             OpenDiagramCommand = new RelayCommand(OpenDiagram);
@@ -81,14 +89,10 @@ namespace _02350AdvancedDemo.ViewModel
             MouseDownShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownShape);
             MouseMoveShapeCommand = new RelayCommand<MouseEventArgs>(MouseMoveShape);
             MouseUpShapeCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpShape);
-        }
 
-        private void ToggleSidePanelVisibility()
-        {
-            SidePanelVisibility = SidePanelVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
-            RaisePropertyChanged(() => SidePanelVisibility);
-            SidePanelVisibilitySymbol = SidePanelVisibilitySymbol == "<" ? ">" : "<";
-            RaisePropertyChanged(() => SidePanelVisibilitySymbol);
+            MouseDownCanvasCommand = new RelayCommand<MouseButtonEventArgs>(MouseDownCanvas);
+            MouseMoveCanvasCommand = new RelayCommand<MouseEventArgs>(MouseMoveCanvas);
+            MouseUpCanvasCommand = new RelayCommand<MouseButtonEventArgs>(MouseUpCanvas);
         }
 
         private void NewDiagram()
@@ -175,6 +179,7 @@ namespace _02350AdvancedDemo.ViewModel
         private void MouseDownShape(MouseButtonEventArgs e)
         {
             if (!isAddingLine) e.MouseDevice.Target.CaptureMouse();
+            e.Handled = true;
         }
 
         private void MouseMoveShape(MouseEventArgs e)
@@ -182,12 +187,22 @@ namespace _02350AdvancedDemo.ViewModel
             if (Mouse.Captured != null && !isAddingLine)
             {
                 FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                ShapeViewModel shapeModel = (ShapeViewModel)shapeVisualElement.DataContext;
                 Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
                 Point mousePosition = Mouse.GetPosition(canvas);
-                if (moveShapePoint == default(Point)) moveShapePoint = mousePosition;
-                shapeModel.CanvasCenterX = (int)mousePosition.X;
-                shapeModel.CanvasCenterY = (int)mousePosition.Y;
+                if (movePoint == default(Point)) movePoint = mousePosition;
+
+                var selectedShapes = Shapes.Where(x => x.IsMoveSelected);
+                if (!selectedShapes.Any()) selectedShapes = new List<ShapeViewModel>() { (ShapeViewModel)shapeVisualElement.DataContext };
+                
+                foreach(var s in selectedShapes)
+                {
+                    if (!moveOriginalPositions.ContainsKey(s.Number)) moveOriginalPositions.Add(s.Number, new Point(s.CanvasCenterX, s.CanvasCenterY));
+                    var originalPosition = moveOriginalPositions[s.Number];
+                    s.CanvasCenterX = (originalPosition.X + (mousePosition.X - movePoint.X));
+                    s.CanvasCenterY = (originalPosition.Y + (mousePosition.Y - movePoint.Y));
+                }
+
+                e.Handled = true;
             }
         }
 
@@ -215,11 +230,69 @@ namespace _02350AdvancedDemo.ViewModel
             else
             {
                 FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                ShapeViewModel shape = (ShapeViewModel)shapeVisualElement.DataContext;
                 Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
                 Point mousePosition = Mouse.GetPosition(canvas);
-                undoRedoController.AddAndExecute(new MoveShapeCommand(shape, (int)moveShapePoint.X, (int)moveShapePoint.Y, (int)mousePosition.X, (int)mousePosition.Y));
-                moveShapePoint = new Point();
+
+                var selectedShapes = Shapes.Where(x => x.IsMoveSelected).ToList();
+                if (!selectedShapes.Any()) selectedShapes = new List<ShapeViewModel>() { (ShapeViewModel)shapeVisualElement.DataContext };
+
+                foreach (var s in selectedShapes)
+                {
+                    var originalPosition = moveOriginalPositions[s.Number];
+                    s.CanvasCenterX = originalPosition.X;
+                    s.CanvasCenterY = originalPosition.Y;
+                }
+                undoRedoController.AddAndExecute(new MoveShapesCommand(selectedShapes, (mousePosition.X - movePoint.X), (mousePosition.Y - movePoint.Y)));
+
+                movePoint = new Point();
+                moveOriginalPositions.Clear();
+                e.MouseDevice.Target.ReleaseMouseCapture();
+            }
+            e.Handled = true;
+        }
+
+        private void MouseDownCanvas(MouseButtonEventArgs e)
+        {
+            if (!isAddingLine)
+            {
+                SelectionBoxStart = Mouse.GetPosition(e.MouseDevice.Target);
+                e.MouseDevice.Target.CaptureMouse();
+            }
+        }
+
+        private void MouseMoveCanvas(MouseEventArgs e)
+        {
+            if (Mouse.Captured != null && !isAddingLine)
+            {
+                var SelectionBoxNow = Mouse.GetPosition(e.MouseDevice.Target);
+                SelectionBoxX = Math.Min(SelectionBoxStart.X, SelectionBoxNow.X);
+                SelectionBoxY = Math.Min(SelectionBoxStart.Y, SelectionBoxNow.Y);
+                SelectionBoxWidth = Math.Abs(SelectionBoxNow.X - SelectionBoxStart.X);
+                SelectionBoxHeight = Math.Abs(SelectionBoxNow.Y - SelectionBoxStart.Y);
+                RaisePropertyChanged(() => SelectionBoxX);
+                RaisePropertyChanged(() => SelectionBoxY);
+                RaisePropertyChanged(() => SelectionBoxWidth);
+                RaisePropertyChanged(() => SelectionBoxHeight);
+            }
+        }
+
+        private void MouseUpCanvas(MouseButtonEventArgs e)
+        {
+            if (!isAddingLine)
+            {
+                var SelectionBoxEnd = Mouse.GetPosition(e.MouseDevice.Target);
+                var smallX = Math.Min(SelectionBoxStart.X, SelectionBoxEnd.X);
+                var smallY = Math.Min(SelectionBoxStart.Y, SelectionBoxEnd.Y);
+                var largeX = Math.Max(SelectionBoxStart.X, SelectionBoxEnd.X);
+                var largeY = Math.Max(SelectionBoxStart.Y, SelectionBoxEnd.Y);
+                foreach (var s in Shapes)
+                    s.IsMoveSelected = s.CanvasCenterX > smallX && s.CanvasCenterX < largeX && s.CanvasCenterY > smallY && s.CanvasCenterY < largeY;
+
+                SelectionBoxX = SelectionBoxY = SelectionBoxWidth = SelectionBoxHeight = 0;
+                RaisePropertyChanged(() => SelectionBoxX);
+                RaisePropertyChanged(() => SelectionBoxY);
+                RaisePropertyChanged(() => SelectionBoxWidth);
+                RaisePropertyChanged(() => SelectionBoxHeight);
                 e.MouseDevice.Target.ReleaseMouseCapture();
             }
         }

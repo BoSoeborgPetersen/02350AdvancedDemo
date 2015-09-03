@@ -21,14 +21,7 @@
             <TextBlock Grid.Row="1" Text="Choose" TextAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="3" Text="by clicking" TextAlignment="Center" FontWeight="Bold"/>
         </Grid>
-        <Ellipse Opacity="{Binding DataContext.ModeOpacity, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Stroke="Purple" StrokeThickness="6" StrokeDashArray="3">
-            <Ellipse.Fill>
-                <RadialGradientBrush>
-                    <GradientStop Color="CornflowerBlue" Offset="0.0" />
-                    <GradientStop  Color="Blue" Offset="0.60" />
-                    <GradientStop Color="Navy" Offset="0.90" />
-                </RadialGradientBrush>
-            </Ellipse.Fill>
+        <Ellipse Opacity="{Binding DataContext.ModeOpacity, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Stroke="Purple" StrokeThickness="6" StrokeDashArray="3.3" Fill="{Binding BackgroundColor}">
             <Ellipse.RenderTransform>
                 <RotateTransform CenterX="{Binding CenterX}" CenterY="{Binding CenterY}"/>
             </Ellipse.RenderTransform>

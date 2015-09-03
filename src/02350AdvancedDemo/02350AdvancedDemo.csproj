@@ -83,7 +83,7 @@
     <Compile Include="UndoRedo\AddLineCommand.cs" />
     <Compile Include="UndoRedo\AddShapeCommand.cs" />
     <Compile Include="UndoRedo\IUndoRedoCommand.cs" />
-    <Compile Include="UndoRedo\MoveShapeCommand.cs" />
+    <Compile Include="UndoRedo\MoveShapesCommand.cs" />
     <Compile Include="UndoRedo\RemoveLinesCommand.cs" />
     <Compile Include="UndoRedo\RemoveShapesCommand.cs" />
     <Compile Include="UndoRedo\UndoRedoController.cs" />

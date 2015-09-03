@@ -5,9 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="260">
-    <DockPanel>
-        <Button DockPanel.Dock="Right" Content="{Binding SidePanelVisibilitySymbol}" Command="{Binding ToggleSidePanelVisibilityCommand}" />
-        <StackPanel Width="240" Visibility="{Binding SidePanelVisibility}">
+    <Expander ExpandDirection="Left" Header="Sidebar">
+        <StackPanel Width="240">
             <GroupBox Header="Shapes">
                 <StackPanel>
                     <Button Content="Add Circle" Command="{Binding AddCircleCommand}"/>
@@ -60,5 +59,5 @@
                 </StackPanel>
             </GroupBox>
         </StackPanel>
-    </DockPanel>
+    </Expander>
 </UserControl>

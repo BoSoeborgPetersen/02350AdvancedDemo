@@ -14,18 +14,21 @@ namespace _02350AdvancedDemo.ViewModel
         public Shape Shape { get; set; }
 
         public int Number { get { return Shape.Number; } set { Shape.Number = value; RaisePropertyChanged(); } }
-        public int X { get { return Shape.X; } set { Shape.X = value; RaisePropertyChanged(); RaisePropertyChanged(() => CanvasCenterX); } }
-        public int Y { get { return Shape.Y; } set { Shape.Y = value; RaisePropertyChanged(); RaisePropertyChanged(() => CanvasCenterY); } }
-        public int Width { get { return Shape.Width; } set { Shape.Width = value; RaisePropertyChanged(); RaisePropertyChanged(() => CanvasCenterX); RaisePropertyChanged(() => CenterX); } }
-        public int Height { get { return Shape.Height; } set { Shape.Height = value; RaisePropertyChanged(); RaisePropertyChanged(() => CanvasCenterY); RaisePropertyChanged(() => CenterY); } }
+        public double X { get { return Shape.X; } set { Shape.X = value; RaisePropertyChanged(); RaisePropertyChanged(() => CanvasCenterX); } }
+        public double Y { get { return Shape.Y; } set { Shape.Y = value; RaisePropertyChanged(); RaisePropertyChanged(() => CanvasCenterY); } }
+        public double Width { get { return Shape.Width; } set { Shape.Width = value; RaisePropertyChanged(); RaisePropertyChanged(() => CanvasCenterX); RaisePropertyChanged(() => CenterX); } }
+        public double Height { get { return Shape.Height; } set { Shape.Height = value; RaisePropertyChanged(); RaisePropertyChanged(() => CanvasCenterY); RaisePropertyChanged(() => CenterY); } }
         public List<string> Data { get { return Shape.Data; } set { Shape.Data = value; } }
-        public int CanvasCenterX { get { return X + Width / 2; } set { X = value - Width / 2; RaisePropertyChanged(() => X); } }
-        public int CanvasCenterY { get { return Y + Height / 2; } set { Y = value - Height / 2; RaisePropertyChanged(() => Y); } }
-        public int CenterX => Width / 2;
-        public int CenterY => Height / 2;
+        public double CanvasCenterX { get { return X + Width / 2; } set { X = value - Width / 2; RaisePropertyChanged(() => X); } }
+        public double CanvasCenterY { get { return Y + Height / 2; } set { Y = value - Height / 2; RaisePropertyChanged(() => Y); } }
+        public double CenterX => Width / 2;
+        public double CenterY => Height / 2;
         private bool isSelected;
         public bool IsSelected { get { return isSelected; } set { isSelected = value; RaisePropertyChanged(); RaisePropertyChanged(() => SelectedColor); } }
         public Brush SelectedColor => IsSelected ? Brushes.Red : Brushes.Yellow;
+        private bool isMoveSelected;
+        public bool IsMoveSelected { get { return isMoveSelected; } set { isMoveSelected = value;  RaisePropertyChanged(); RaisePropertyChanged(() => BackgroundColor); } }
+        public Brush BackgroundColor => IsMoveSelected ? Brushes.SkyBlue : Brushes.Navy;
 
         public ShapeViewModel(Shape _shape)
         {

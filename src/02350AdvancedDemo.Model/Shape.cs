@@ -16,10 +16,10 @@ namespace _02350AdvancedDemo.Model
         private static int counter = 0;
         public int Number { get; set; } = ++counter;
 
-        public int X { get; set; } = 200;
-        public int Y { get; set; } = 200;
-        public int Width { get; set; } = 100;
-        public int Height { get; set; } = 100;
+        public double X { get; set; } = 200;
+        public double Y { get; set; } = 200;
+        public double Width { get; set; } = 100;
+        public double Height { get; set; } = 100;
 
         public List<string> Data { get; set; }
 

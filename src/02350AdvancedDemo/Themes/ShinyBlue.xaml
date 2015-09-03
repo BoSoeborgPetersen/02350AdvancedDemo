@@ -1220,8 +1220,9 @@
                                 </Grid.LayoutTransform>
                                 <Rectangle Margin="3,3,3,3" x:Name="Rectangle" Fill="{DynamicResource NormalBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="2" RadiusY="2" />
                                 <Rectangle Margin="3,3,3,3" x:Name="HoverRectangle" Fill="{DynamicResource HoverBrush}" Stroke="{DynamicResource NormalBorderBrush}" StrokeThickness="1" RadiusX="2" RadiusY="2" Opacity="0" />
-                                <Path HorizontalAlignment="Center" x:Name="Up_Arrow" VerticalAlignment="Center" Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z" />
-                                <Path Visibility="Collapsed" HorizontalAlignment="Center" x:Name="Down_Arrow" VerticalAlignment="Center" Fill="{DynamicResource GlyphBrush}" Data="M 0 4 L 4 0 L 8 4 Z" />
+                                <!-- Custom (02350 Demo) -->
+                                <Path HorizontalAlignment="Center" x:Name="Up_Arrow" VerticalAlignment="Center" Fill="{DynamicResource GlyphBrush}" Data="M 0 4 L 4 0 L 8 4 Z" />
+                                <Path Visibility="Collapsed" HorizontalAlignment="Center" x:Name="Down_Arrow" VerticalAlignment="Center" Fill="{DynamicResource GlyphBrush}" Data="M 0 0 L 4 4 L 8 0 Z" />
                             </Grid>
                             <ContentPresenter SnapsToDevicePixels="True" HorizontalAlignment="Center" Margin="4,4,2,0" VerticalAlignment="Top" Grid.Row="1" RecognizesAccessKey="True">
                                 <ContentPresenter.LayoutTransform>

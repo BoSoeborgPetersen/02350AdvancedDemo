@@ -9,7 +9,7 @@
              Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Width="{Binding Width}" Height="{Binding Height}" 
              d:DesignHeight="100" d:DesignWidth="100">
     <Grid>
-        <Ellipse Fill="{Binding SelectedColor}" Stroke="Transparent" StrokeThickness="6" />
+        <Rectangle Fill="{Binding SelectedColor}" Stroke="Transparent" StrokeThickness="6" />
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -21,14 +21,7 @@
             <TextBlock Grid.Row="1" Text="Choose" TextAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="3" Text="by clicking" TextAlignment="Center" FontWeight="Bold"/>
         </Grid>
-        <Rectangle Opacity="{Binding DataContext.ModeOpacity, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Stroke="Purple" StrokeThickness="6" StrokeDashArray="3.1">
-            <Rectangle.Fill>
-                <RadialGradientBrush>
-                    <GradientStop Color="CornflowerBlue" Offset="0.0" />
-                    <GradientStop  Color="Blue" Offset="0.60" />
-                    <GradientStop Color="Navy" Offset="0.90" />
-                </RadialGradientBrush>
-            </Rectangle.Fill>
+        <Rectangle Opacity="{Binding DataContext.ModeOpacity, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Stroke="Purple" StrokeThickness="6" StrokeDashArray="3" Fill="{Binding BackgroundColor}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDown">
                     <cmd:EventToCommand Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
