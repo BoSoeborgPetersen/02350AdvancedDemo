@@ -24,8 +24,8 @@ namespace _02350AdvancedDemo.ViewModel
         private Type addingLineType;
         private ShapeViewModel addingLineFrom;
 
-        private Point movePoint;
-        private Dictionary<int, Point> moveOriginalPositions = new Dictionary<int, Point>();
+        private Point initialMousePosition;
+        private Dictionary<int, Point> initialShapePositions = new Dictionary<int, Point>();
 
         private Point SelectionBoxStart;
 
@@ -178,7 +178,21 @@ namespace _02350AdvancedDemo.ViewModel
 
         private void MouseDownShape(MouseButtonEventArgs e)
         {
-            if (!isAddingLine) e.MouseDevice.Target.CaptureMouse();
+            if (!isAddingLine)
+            {
+                var shape = TargetShape(e);
+                var mousePosition = RelativeMousePosition(e);
+
+                initialMousePosition = mousePosition;
+
+                var selectedShapes = Shapes.Where(x => x.IsMoveSelected);
+                if (!selectedShapes.Any()) selectedShapes = new List<ShapeViewModel>() { TargetShape(e) };
+
+                foreach (var s in selectedShapes)
+                    initialShapePositions.Add(s.Number, new Point(s.CanvasCenterX, s.CanvasCenterY));
+
+                e.MouseDevice.Target.CaptureMouse();
+            }
             e.Handled = true;
         }
 
@@ -186,20 +200,16 @@ namespace _02350AdvancedDemo.ViewModel
         {
             if (Mouse.Captured != null && !isAddingLine)
             {
-                FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
-                Point mousePosition = Mouse.GetPosition(canvas);
-                if (movePoint == default(Point)) movePoint = mousePosition;
+                var mousePosition = RelativeMousePosition(e);
 
                 var selectedShapes = Shapes.Where(x => x.IsMoveSelected);
-                if (!selectedShapes.Any()) selectedShapes = new List<ShapeViewModel>() { (ShapeViewModel)shapeVisualElement.DataContext };
+                if (!selectedShapes.Any()) selectedShapes = new List<ShapeViewModel>() { TargetShape(e) };
                 
                 foreach(var s in selectedShapes)
                 {
-                    if (!moveOriginalPositions.ContainsKey(s.Number)) moveOriginalPositions.Add(s.Number, new Point(s.CanvasCenterX, s.CanvasCenterY));
-                    var originalPosition = moveOriginalPositions[s.Number];
-                    s.CanvasCenterX = (originalPosition.X + (mousePosition.X - movePoint.X));
-                    s.CanvasCenterY = (originalPosition.Y + (mousePosition.Y - movePoint.Y));
+                    var originalPosition = initialShapePositions[s.Number];
+                    s.CanvasCenterX = (originalPosition.X + (mousePosition.X - initialMousePosition.X));
+                    s.CanvasCenterY = (originalPosition.Y + (mousePosition.Y - initialMousePosition.Y));
                 }
 
                 e.Handled = true;
@@ -210,8 +220,8 @@ namespace _02350AdvancedDemo.ViewModel
         {
             if (isAddingLine)
             {
-                FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                ShapeViewModel shape = (ShapeViewModel)shapeVisualElement.DataContext;
+                var shape = TargetShape(e);
+
                 if (addingLineFrom == null) { addingLineFrom = shape; addingLineFrom.IsSelected = true; }
                 else if (addingLineFrom.Number != shape.Number)
                 {
@@ -229,23 +239,21 @@ namespace _02350AdvancedDemo.ViewModel
             }
             else
             {
-                FrameworkElement shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-                Canvas canvas = FindParentOfType<Canvas>(shapeVisualElement);
-                Point mousePosition = Mouse.GetPosition(canvas);
+                var mousePosition = RelativeMousePosition(e);
 
                 var selectedShapes = Shapes.Where(x => x.IsMoveSelected).ToList();
-                if (!selectedShapes.Any()) selectedShapes = new List<ShapeViewModel>() { (ShapeViewModel)shapeVisualElement.DataContext };
+                if (!selectedShapes.Any()) selectedShapes = new List<ShapeViewModel>() { TargetShape(e) };
 
                 foreach (var s in selectedShapes)
                 {
-                    var originalPosition = moveOriginalPositions[s.Number];
+                    var originalPosition = initialShapePositions[s.Number];
                     s.CanvasCenterX = originalPosition.X;
                     s.CanvasCenterY = originalPosition.Y;
                 }
-                undoRedoController.AddAndExecute(new MoveShapesCommand(selectedShapes, (mousePosition.X - movePoint.X), (mousePosition.Y - movePoint.Y)));
+                undoRedoController.AddAndExecute(new MoveShapesCommand(selectedShapes, (mousePosition.X - initialMousePosition.X), (mousePosition.Y - initialMousePosition.Y)));
 
-                movePoint = new Point();
-                moveOriginalPositions.Clear();
+                initialMousePosition = new Point();
+                initialShapePositions.Clear();
                 e.MouseDevice.Target.ReleaseMouseCapture();
             }
             e.Handled = true;
@@ -295,6 +303,19 @@ namespace _02350AdvancedDemo.ViewModel
                 RaisePropertyChanged(() => SelectionBoxHeight);
                 e.MouseDevice.Target.ReleaseMouseCapture();
             }
+        }
+
+        private ShapeViewModel TargetShape(MouseEventArgs e)
+        {
+            var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            return (ShapeViewModel)shapeVisualElement.DataContext;
+        }
+
+        private Point RelativeMousePosition(MouseEventArgs e)
+        {
+            var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
+            var canvas = FindParentOfType<Canvas>(shapeVisualElement);
+            return Mouse.GetPosition(canvas);
         }
 
         private static T FindParentOfType<T>(DependencyObject o)

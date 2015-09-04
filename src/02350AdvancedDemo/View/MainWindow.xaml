@@ -5,7 +5,7 @@
         xmlns:View="clr-namespace:_02350AdvancedDemo.View"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
-        Title="02350 Advanced Demo" Height="600" Width="800">
+        Title="02350 Advanced Demo" Height="600" Width="800" Icon="/Icon.ico">
     <Window.InputBindings>
         <KeyBinding Command="{Binding NewDiagramCommand}" Gesture="CTRL+N"/>
         <KeyBinding Command="{Binding OpenDiagramCommand}" Gesture="CTRL+O"/>
@@ -23,15 +23,6 @@
             <Slider x:Name="zoomSlider" ToolTip="Zoom" Value="1" Minimum="0.1" Maximum="10"/>
         </StackPanel>
         <Grid>
-            <Grid.Background>
-                <VisualBrush TileMode="Tile"
-                             Viewport="0,0,40,40" ViewportUnits="Absolute" 
-                             Viewbox="0,0,40,40" ViewboxUnits="Absolute">
-                    <VisualBrush.Visual>
-                        <Rectangle Stroke="Black" StrokeThickness="0.05" Height="40" Width="40"/>
-                    </VisualBrush.Visual>
-                </VisualBrush>
-            </Grid.Background>
             <Grid.LayoutTransform>
                 <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=zoomSlider, Path=Value}" ScaleY="{Binding ElementName=zoomSlider, Path=Value}"/>
             </Grid.LayoutTransform>
