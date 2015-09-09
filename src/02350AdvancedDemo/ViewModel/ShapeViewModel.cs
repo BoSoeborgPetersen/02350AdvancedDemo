@@ -1,16 +1,21 @@
 ﻿using _02350AdvancedDemo.Model;
+using _02350AdvancedDemo.UndoRedo;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace _02350AdvancedDemo.ViewModel
 {
-    public abstract class ShapeViewModel : ViewModelBase
+    public abstract class ShapeViewModel : BaseViewModel
     {
+        public ICommand RemoveCommand { get; }
+
         public Shape Shape { get; set; }
 
         public int Number { get { return Shape.Number; } set { Shape.Number = value; RaisePropertyChanged(); } }
@@ -30,10 +35,18 @@ namespace _02350AdvancedDemo.ViewModel
         public bool IsMoveSelected { get { return isMoveSelected; } set { isMoveSelected = value;  RaisePropertyChanged(); RaisePropertyChanged(() => BackgroundColor); } }
         public Brush BackgroundColor => IsMoveSelected ? Brushes.SkyBlue : Brushes.Navy;
 
-        public ShapeViewModel(Shape _shape)
+        public ShapeViewModel(Shape _shape) : base()
         {
             Shape = _shape;
+
+            RemoveCommand = new RelayCommand(Remove);
         }
+
+        private void Remove()
+        {
+            undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, new List<ShapeViewModel>() { this }));
+        }
+
         public override string ToString() => Number.ToString();
     }
 }

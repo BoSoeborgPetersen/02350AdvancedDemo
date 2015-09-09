@@ -15,7 +15,7 @@ namespace _02350AdvancedDemo.Serialization
 
         private SerializerXML() { }
 
-        public void Serialize(Diagram diagram, string path)
+        public void SerializeToFile(Diagram diagram, string path)
         {
             using(FileStream stream = File.Create(path))
             {
@@ -24,9 +24,33 @@ namespace _02350AdvancedDemo.Serialization
             }
         }
 
-        public Diagram Deserialize(string path)
+        public Diagram DeserializeFromFile(string path)
         {
             using (FileStream stream = File.OpenRead(path))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(Diagram));
+                Diagram diagram = serializer.Deserialize(stream) as Diagram;
+
+                return diagram;
+            }
+        }
+
+        public string SerializeToString(Diagram diagram)
+        {
+            var stringBuilder = new StringBuilder();
+
+            using (TextWriter stream = new StringWriter(stringBuilder))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(Diagram));
+                serializer.Serialize(stream, diagram);
+            }
+
+            return stringBuilder.ToString();
+        }
+
+        public Diagram DeserializeFromString(string xml)
+        {
+            using (TextReader stream = new StringReader(xml))
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Diagram));
                 Diagram diagram = serializer.Deserialize(stream) as Diagram;

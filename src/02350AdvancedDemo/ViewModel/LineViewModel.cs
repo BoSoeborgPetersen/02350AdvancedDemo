@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace _02350AdvancedDemo.ViewModel
 {
-    public class LineViewModel : ViewModelBase
+    public class LineViewModel : BaseViewModel
     {
         private ShapeViewModel from;
         private ShapeViewModel to;
@@ -19,7 +19,7 @@ namespace _02350AdvancedDemo.ViewModel
         public string Label { get { return Line.Label; } set { Line.Label = value; RaisePropertyChanged(); } }
         public DoubleCollection DashLength => Line is DashLine ? new DoubleCollection() { 2 }  : new DoubleCollection() { 1, 0 };
 
-        public LineViewModel(Line _line)
+        public LineViewModel(Line _line) : base()
         {
             Line = _line;
         }

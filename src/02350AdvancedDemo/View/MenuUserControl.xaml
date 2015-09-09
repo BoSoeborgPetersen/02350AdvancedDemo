@@ -29,13 +29,11 @@
                     <RibbonSplitMenuItem Header="Redo 4" ImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="4"/>
                     <RibbonSplitMenuItem Header="Redo 5" ImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="5"/>
                 </RibbonSplitButton>
-                <RibbonButton ToolTip="Cut" SmallImageSource="/Images/Cut.png" />
-                <RibbonButton ToolTip="Copy" SmallImageSource="/Images/Copy.png" />
-                <RibbonSplitButton ToolTip="Paste" SmallImageSource="/Images/Paste.png">
-                    <RibbonSplitMenuItem Header="Paste 2" ImageSource="/Images/Paste.png"/>
-                    <RibbonSplitMenuItem Header="Paste 3" ImageSource="/Images/Paste.png"/>
-                    <RibbonSplitMenuItem Header="Paste 4" ImageSource="/Images/Paste.png"/>
-                    <RibbonSplitMenuItem Header="Paste 5" ImageSource="/Images/Paste.png"/>
+                <RibbonButton ToolTip="Cut" SmallImageSource="/Images/Cut.png" Command="{Binding CutCommand}"/>
+                <RibbonButton ToolTip="Copy" SmallImageSource="/Images/Copy.png" Command="{Binding CopyCommand}"/>
+                <RibbonSplitButton ToolTip="Paste" SmallImageSource="/Images/Paste.png" Command="{Binding PasteCommand}">
+                    <RibbonSplitMenuItem Header="Only Shapes" ImageSource="/Images/Paste.png" Command="{Binding PasteCommand}"/>
+                    <RibbonSplitMenuItem Header="Something?" ImageSource="/Images/Paste.png" Command="{Binding PasteCommand}"/>
                 </RibbonSplitButton>
             </RibbonQuickAccessToolBar>
         </Ribbon.QuickAccessToolBar>
@@ -48,7 +46,7 @@
                 <RibbonSeparator/>
                 <RibbonApplicationMenuItem Header="Options" ImageSource="/Images/Options.png" />
                 <RibbonSeparator/>
-                <RibbonApplicationMenuItem Header="Exit" ImageSource="/Images/Exit.png" />
+                <RibbonApplicationMenuItem Header="Exit" ImageSource="/Images/Exit.png" Command="{Binding ExitCommand}" />
             </RibbonApplicationMenu>
         </Ribbon.ApplicationMenu>
         <!-- Ribbon Tab #1: Home -->
@@ -78,12 +76,12 @@
             </RibbonGroup>
             <!-- Copy/Paste group-->
             <RibbonGroup Header="Copy/Paste">
-                <RibbonButton SmallImageSource="/Images/Cut.png" Label="Cut" KeyTip="X" />
-                <RibbonButton SmallImageSource="/Images/Copy.png" Label="Copy" KeyTip="C" />
+                <RibbonButton SmallImageSource="/Images/Cut.png" Label="Cut" KeyTip="X" Command="{Binding CutCommand}" />
+                <RibbonButton SmallImageSource="/Images/Copy.png" Label="Copy" KeyTip="C" Command="{Binding CopyCommand}"/>
                 <RibbonMenuButton SmallImageSource="/Images/Paste.png" Label="Paste" KeyTip="V">
-                    <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Paste"/>
-                    <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Only Shapes"/>
-                    <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Something?"/>
+                    <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Paste" Command="{Binding PasteCommand}"/>
+                    <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Only Shapes" Command="{Binding PasteCommand}"/>
+                    <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Something?" Command="{Binding PasteCommand}"/>
                 </RibbonMenuButton>
             </RibbonGroup>
         </RibbonTab>

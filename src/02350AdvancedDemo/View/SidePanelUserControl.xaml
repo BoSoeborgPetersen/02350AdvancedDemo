@@ -20,7 +20,7 @@
                             <DataGridTextColumn Binding="{Binding Height}" Header="Height" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Remove chosen shape" Command="{Binding RemoveShapeCommand}" CommandParameter="{Binding ElementName=shapesControl, Path=SelectedItems}"/>
+                    <Button Content="Remove chosen shape" Command="{Binding RemoveShapesCommand}" CommandParameter="{Binding ElementName=shapesControl, Path=SelectedItems}"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Lines">

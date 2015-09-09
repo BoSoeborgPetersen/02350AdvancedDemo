@@ -8,14 +8,12 @@ namespace _02350AdvancedDemo.UndoRedo
 {
     public class UndoRedoController
     {
-        private static UndoRedoController controller = new UndoRedoController();
+        public static UndoRedoController Instance { get; } = new UndoRedoController();
 
         private readonly Stack<IUndoRedoCommand> undoStack = new Stack<IUndoRedoCommand>();
         private readonly Stack<IUndoRedoCommand> redoStack = new Stack<IUndoRedoCommand>();
 
         private UndoRedoController() { }
-
-        public static UndoRedoController GetInstance() => controller;
 
         public void AddAndExecute(IUndoRedoCommand command)
         {

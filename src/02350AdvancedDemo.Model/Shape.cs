@@ -23,6 +23,11 @@ namespace _02350AdvancedDemo.Model
 
         public List<string> Data { get; set; }
 
+        public void NewNumber()
+        {
+            Number = ++counter;
+        }
+
         public override string ToString() => Number.ToString();
     }
 }

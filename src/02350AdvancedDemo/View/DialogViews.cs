@@ -8,10 +8,14 @@ using System.Windows;
 
 namespace _02350AdvancedDemo.ViewModel
 {
-    public class DialogViewModel
+    public class DialogViews
     {
+        public static DialogViews Instance { get; } = new DialogViews();
+
         private static OpenFileDialog openDialog = new OpenFileDialog() { Title = "Open Diagram", Filter = "XML Document (.xml)|*.xml", DefaultExt = "xml", InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), CheckFileExists = true };
         private static SaveFileDialog saveDialog = new SaveFileDialog() { Title = "Save Diagram", Filter = "XML Document (.xml)|*.xml", DefaultExt = "xml", InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) };
+
+        private DialogViews() { }
 
         public bool ShowNew() => 
             MessageBox.Show("Are you sure (bla bla)?", "Warning", MessageBoxButton.YesNo) == MessageBoxResult.Yes;

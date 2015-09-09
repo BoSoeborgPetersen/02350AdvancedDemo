@@ -12,6 +12,9 @@
         <KeyBinding Command="{Binding SaveDiagramCommand}" Gesture="CTRL+S"/>
         <KeyBinding Command="{Binding UndoCommand}" Gesture="CTRL+Z"/>
         <KeyBinding Command="{Binding RedoCommand}" Gesture="CTRL+Y"/>
+        <KeyBinding Command="{Binding CutCommand}" Gesture="CTRL+X"/>
+        <KeyBinding Command="{Binding CopyCommand}" Gesture="CTRL+C"/>
+        <KeyBinding Command="{Binding PasteCommand}" Gesture="CTRL+V"/>
     </Window.InputBindings>
     <Window.DataContext>
         <ViewModel:MainViewModel />
@@ -23,17 +26,26 @@
             <Slider x:Name="zoomSlider" ToolTip="Zoom" Value="1" Minimum="0.1" Maximum="10"/>
         </StackPanel>
         <Grid>
+            <Grid.Background>
+                <VisualBrush TileMode="Tile"
+                             Viewport="0,0,40,40" ViewportUnits="Absolute" 
+                             Viewbox="0,0,40,40" ViewboxUnits="Absolute">
+                    <VisualBrush.Visual>
+                        <Rectangle Stroke="Black" StrokeThickness="0.05" Height="40" Width="40"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Grid.Background>
             <Grid.LayoutTransform>
                 <ScaleTransform CenterX="0" CenterY="0" ScaleX="{Binding ElementName=zoomSlider, Path=Value}" ScaleY="{Binding ElementName=zoomSlider, Path=Value}"/>
             </Grid.LayoutTransform>
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDown">
+                <i:EventTrigger EventName="MouseLeftButtonDown">
                     <cmd:EventToCommand Command="{Binding MouseDownCanvasCommand}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
                 <i:EventTrigger EventName="MouseMove">
                     <cmd:EventToCommand Command="{Binding MouseMoveCanvasCommand}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
-                <i:EventTrigger EventName="MouseUp">
+                <i:EventTrigger EventName="MouseLeftButtonUp">
                     <cmd:EventToCommand Command="{Binding MouseUpCanvasCommand}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
