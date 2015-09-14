@@ -3,6 +3,8 @@ using _02350AdvancedDemo.Serialization;
 using _02350AdvancedDemo.UndoRedo;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Microsoft.Practices.ServiceLocation;
+using Microsoft.Practices.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +20,8 @@ namespace _02350AdvancedDemo.ViewModel
     public class BaseViewModel : ViewModelBase
     {
         protected UndoRedoController undoRedoController = UndoRedoController.Instance;
-        protected DialogViews dialogVM = DialogViews.Instance;
+        [Dependency]
+        public DialogViews dialogVM { get; set; }
 
         protected static bool isAddingLine;
         protected static Type addingLineType;

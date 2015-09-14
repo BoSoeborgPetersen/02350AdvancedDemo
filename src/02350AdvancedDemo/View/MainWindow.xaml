@@ -5,6 +5,7 @@
         xmlns:View="clr-namespace:_02350AdvancedDemo.View"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+        DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
         Title="02350 Advanced Demo" Height="600" Width="800" Icon="/Icon.ico">
     <Window.InputBindings>
         <KeyBinding Command="{Binding NewDiagramCommand}" Gesture="CTRL+N"/>
@@ -16,9 +17,6 @@
         <KeyBinding Command="{Binding CopyCommand}" Gesture="CTRL+C"/>
         <KeyBinding Command="{Binding PasteCommand}" Gesture="CTRL+V"/>
     </Window.InputBindings>
-    <Window.DataContext>
-        <ViewModel:MainViewModel />
-    </Window.DataContext>
     <DockPanel>
         <View:Menu DockPanel.Dock="Top"/>
         <View:SidePanelUserControl/>
