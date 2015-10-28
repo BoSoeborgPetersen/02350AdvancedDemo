@@ -15,7 +15,12 @@ namespace _02350AdvancedDemo.Serialization
 
         private SerializerXML() { }
 
-        public void SerializeToFile(Diagram diagram, string path)
+        public async void AsyncSerializeToFile(Diagram diagram, string path)
+        {
+            await Task.Run(() => SerializeToFile(diagram, path));
+        }
+
+        private void SerializeToFile(Diagram diagram, string path)
         {
             using(FileStream stream = File.Create(path))
             {
@@ -24,7 +29,12 @@ namespace _02350AdvancedDemo.Serialization
             }
         }
 
-        public Diagram DeserializeFromFile(string path)
+        public Task<Diagram> AsyncDeserializeFromFile(string path)
+        {
+            return Task.Run(() => DeserializeFromFile(path));
+        }
+
+        private Diagram DeserializeFromFile(string path)
         {
             using (FileStream stream = File.OpenRead(path))
             {
@@ -35,7 +45,12 @@ namespace _02350AdvancedDemo.Serialization
             }
         }
 
-        public string SerializeToString(Diagram diagram)
+        public Task<string> AsyncSerializeToString(Diagram diagram)
+        {
+            return Task.Run(() => SerializeToString(diagram));
+        }
+
+        private string SerializeToString(Diagram diagram)
         {
             var stringBuilder = new StringBuilder();
 
@@ -48,7 +63,12 @@ namespace _02350AdvancedDemo.Serialization
             return stringBuilder.ToString();
         }
 
-        public Diagram DeserializeFromString(string xml)
+        public Task<Diagram> AsyncDeserializeFromString(string xml)
+        {
+            return Task.Run(() => DeserializeFromString(xml));
+        }
+
+        private Diagram DeserializeFromString(string xml)
         {
             using (TextReader stream = new StringReader(xml))
             {

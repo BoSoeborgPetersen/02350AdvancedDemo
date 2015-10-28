@@ -1,4 +1,6 @@
-﻿using Microsoft.Practices.ServiceLocation;
+﻿using _02350AdvancedDemo.UndoRedo;
+using GalaSoft.MvvmLight;
+using Microsoft.Practices.ServiceLocation;
 using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
@@ -16,15 +18,15 @@ namespace _02350AdvancedDemo.ViewModel
             var locator = new UnityServiceLocator(container);
             ServiceLocator.SetLocatorProvider(() => locator);
 
-            container.RegisterType<DialogViews>();
-            //if (ViewModelBase.IsInDesignModeStatic)
-            //{
-            //    SimpleIoc.Default.Register<IDataService, Design.DesignDataService>();
-            //}
-            //else
-            //{
-            //    SimpleIoc.Default.Register<IDataService, DataService>();
-            //}
+            if (ViewModelBase.IsInDesignModeStatic)
+            {
+                // Insert dependencies for design-time data.
+            }
+            else
+            {
+                container.RegisterType<DialogViews>();
+                //container.RegisterType<UndoRedoController>();
+            }
 
             container.RegisterType<MainViewModel>();
         }

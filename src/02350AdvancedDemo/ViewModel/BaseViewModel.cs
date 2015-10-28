@@ -17,7 +17,7 @@ using System.Windows.Input;
 
 namespace _02350AdvancedDemo.ViewModel
 {
-    public class BaseViewModel : ViewModelBase
+    public abstract class BaseViewModel : ViewModelBase
     {
         protected UndoRedoController undoRedoController = UndoRedoController.Instance;
         [Dependency]
@@ -78,22 +78,22 @@ namespace _02350AdvancedDemo.ViewModel
         {
             if (dialogVM.ShowNew())
             {
-                Shapes = new ObservableCollection<ShapeViewModel>();
-                RaisePropertyChanged(() => Shapes);
-                Lines = new ObservableCollection<LineViewModel>();
-                RaisePropertyChanged(() => Lines);
+                Shapes.Clear();
+                Lines.Clear();
             }
         }
 
-        private void OpenDiagram()
+        private async void OpenDiagram()
         {
             string path = dialogVM.ShowOpen();
             if (path != null)
             {
-                Diagram diagram = SerializerXML.Instance.DeserializeFromFile(path);
+                Diagram diagram = await SerializerXML.Instance.AsyncDeserializeFromFile(path);
 
-                Shapes = new ObservableCollection<ShapeViewModel>(diagram.Shapes.Select(x => x is Circle ? (ShapeViewModel)new CircleViewModel(x) : new SquareViewModel(x)));
-                Lines = new ObservableCollection<LineViewModel>(diagram.Lines.Select(x => new LineViewModel(x)));
+                Shapes.Clear();
+                diagram.Shapes.Select(x => x is Circle ? (ShapeViewModel)new CircleViewModel(x) : new SquareViewModel(x)).ToList().ForEach(x => Shapes.Add(x));
+                Lines.Clear();
+                diagram.Lines.Select(x => new LineViewModel(x)).ToList().ForEach(x => Lines.Add(x));
 
                 // Reconstruct object graph.
                 foreach (LineViewModel line in Lines)
@@ -101,9 +101,6 @@ namespace _02350AdvancedDemo.ViewModel
                     line.From = Shapes.Single(s => s.Number == line.Line.FromNumber);
                     line.To = Shapes.Single(s => s.Number == line.Line.ToNumber);
                 }
-
-                RaisePropertyChanged(() => Shapes);
-                RaisePropertyChanged(() => Lines);
             }
         }
 
@@ -113,11 +110,11 @@ namespace _02350AdvancedDemo.ViewModel
             if (path != null)
             {
                 Diagram diagram = new Diagram() { Shapes = Shapes.Select(x => x.Shape).ToList(), Lines = Lines.Select(x => x.Line).ToList() };
-                SerializerXML.Instance.SerializeToFile(diagram, path);
+                SerializerXML.Instance.AsyncSerializeToFile(diagram, path);
             }
         }
 
-        private void Cut()
+        private async void Cut()
         {
             var selectedShapes = Shapes.Where(x => x.IsMoveSelected).ToList();
             var selectedLines = Lines.Where(x => x.From.IsMoveSelected || x.To.IsMoveSelected).ToList();
@@ -126,28 +123,28 @@ namespace _02350AdvancedDemo.ViewModel
 
             Diagram diagram = new Diagram() { Shapes = selectedShapes.Select(x => x.Shape).ToList(), Lines = selectedLines.Select(x => x.Line).ToList() };
 
-            var xml = SerializerXML.Instance.SerializeToString(diagram);
+            var xml = await SerializerXML.Instance.AsyncSerializeToString(diagram);
 
             Clipboard.SetText(xml);
         }
 
-        private void Copy()
+        private async void Copy()
         {
             var selectedShapes = Shapes.Where(x => x.IsMoveSelected).ToList();
             var selectedLines = Lines.Where(x => x.From.IsMoveSelected || x.To.IsMoveSelected).ToList();
 
             Diagram diagram = new Diagram() { Shapes = selectedShapes.Select(x => x.Shape).ToList(), Lines = selectedLines.Select(x => x.Line).ToList() };
 
-            var xml = SerializerXML.Instance.SerializeToString(diagram);
+            var xml = await SerializerXML.Instance.AsyncSerializeToString(diagram);
 
             Clipboard.SetText(xml);
         }
 
-        private void Paste()
+        private async void Paste()
         {
             var xml = Clipboard.GetText();
 
-            var diagram = SerializerXML.Instance.DeserializeFromString(xml);
+            var diagram = await SerializerXML.Instance.AsyncDeserializeFromString(xml);
 
             var shapes = diagram.Shapes;
             var lines = diagram.Lines;
