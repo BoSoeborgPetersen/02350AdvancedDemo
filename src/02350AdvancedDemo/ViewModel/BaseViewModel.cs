@@ -1,27 +1,21 @@
 ﻿using _02350AdvancedDemo.Model;
 using _02350AdvancedDemo.Serialization;
 using _02350AdvancedDemo.UndoRedo;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
-using Microsoft.Practices.ServiceLocation;
-using Microsoft.Practices.Unity;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace _02350AdvancedDemo.ViewModel
 {
-    public abstract class BaseViewModel : ViewModelBase
+    public abstract class BaseViewModel : ObservableRecipient
     {
         protected UndoRedoController undoRedoController = UndoRedoController.Instance;
-        [Dependency]
-        public DialogViews dialogVM { get; set; }
+        public DialogViews dialogVM { get; set; } = new();
 
         protected static bool isAddingLine;
         protected static Type addingLineType;
@@ -202,14 +196,14 @@ namespace _02350AdvancedDemo.ViewModel
         {
             isAddingLine = true;
             addingLineType = typeof(Line);
-            RaisePropertyChanged(() => ModeOpacity);
+            OnPropertyChanged(nameof(ModeOpacity));
         }
 
         private void AddDashLine()
         {
             isAddingLine = true;
             addingLineType = typeof(DashLine);
-            RaisePropertyChanged(() => ModeOpacity);
+            OnPropertyChanged(nameof(ModeOpacity));
         }
 
         private bool CanRemoveShapes(IList _shapes) => _shapes.Count == 1;

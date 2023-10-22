@@ -1,9 +1,7 @@
 ﻿using _02350AdvancedDemo.Model;
-using _02350AdvancedDemo.Serialization;
 using _02350AdvancedDemo.UndoRedo;
-using GalaSoft.MvvmLight.CommandWpf;
+using CommunityToolkit.Mvvm.Input;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -112,7 +110,7 @@ namespace _02350AdvancedDemo.ViewModel
                     isAddingLine = false;
                     addingLineType = null;
                     addingLineFrom = null;
-                    RaisePropertyChanged(() => ModeOpacity);
+                    OnPropertyChanged(nameof(ModeOpacity));
                 }
             }
             else
@@ -155,10 +153,10 @@ namespace _02350AdvancedDemo.ViewModel
                 SelectionBoxY = Math.Min(SelectionBoxStart.Y, SelectionBoxNow.Y);
                 SelectionBoxWidth = Math.Abs(SelectionBoxNow.X - SelectionBoxStart.X);
                 SelectionBoxHeight = Math.Abs(SelectionBoxNow.Y - SelectionBoxStart.Y);
-                RaisePropertyChanged(() => SelectionBoxX);
-                RaisePropertyChanged(() => SelectionBoxY);
-                RaisePropertyChanged(() => SelectionBoxWidth);
-                RaisePropertyChanged(() => SelectionBoxHeight);
+                OnPropertyChanged(nameof(SelectionBoxX));
+                OnPropertyChanged(nameof(SelectionBoxY));
+                OnPropertyChanged(nameof(SelectionBoxWidth));
+                OnPropertyChanged(nameof(SelectionBoxHeight));
             }
         }
 
@@ -175,10 +173,10 @@ namespace _02350AdvancedDemo.ViewModel
                     s.IsMoveSelected = s.CanvasCenterX > smallX && s.CanvasCenterX < largeX && s.CanvasCenterY > smallY && s.CanvasCenterY < largeY;
 
                 SelectionBoxX = SelectionBoxY = SelectionBoxWidth = SelectionBoxHeight = 0;
-                RaisePropertyChanged(() => SelectionBoxX);
-                RaisePropertyChanged(() => SelectionBoxY);
-                RaisePropertyChanged(() => SelectionBoxWidth);
-                RaisePropertyChanged(() => SelectionBoxHeight);
+                OnPropertyChanged(nameof(SelectionBoxX));
+                OnPropertyChanged(nameof(SelectionBoxY));
+                OnPropertyChanged(nameof(SelectionBoxWidth));
+                OnPropertyChanged(nameof(SelectionBoxHeight));
                 e.MouseDevice.Target.ReleaseMouseCapture();
             }
         }

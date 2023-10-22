@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02350AdvancedDemo", "02350AdvancedDemo\02350AdvancedDemo.csproj", "{32E13EF3-34D5-4367-B4D2-5650E6FFD982}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02350AdvancedDemo", "02350AdvancedDemo\02350AdvancedDemo.csproj", "{C9E901F4-8CE3-4FB8-9AD6-4645B95A73FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02350AdvancedDemo.Model", "02350AdvancedDemo.Model\02350AdvancedDemo.Model.csproj", "{D8F74C64-3EEA-490B-A86B-78D1D2894E76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "02350AdvancedDemo.Model", "02350AdvancedDemo.Model\02350AdvancedDemo.Model.csproj", "{430FCB96-4518-4882-806F-8910B30959F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,28 +13,19 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{32E13EF3-34D5-4367-B4D2-5650E6FFD982}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{32E13EF3-34D5-4367-B4D2-5650E6FFD982}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{32E13EF3-34D5-4367-B4D2-5650E6FFD982}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{32E13EF3-34D5-4367-B4D2-5650E6FFD982}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8F74C64-3EEA-490B-A86B-78D1D2894E76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8F74C64-3EEA-490B-A86B-78D1D2894E76}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8F74C64-3EEA-490B-A86B-78D1D2894E76}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8F74C64-3EEA-490B-A86B-78D1D2894E76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9E901F4-8CE3-4FB8-9AD6-4645B95A73FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9E901F4-8CE3-4FB8-9AD6-4645B95A73FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9E901F4-8CE3-4FB8-9AD6-4645B95A73FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9E901F4-8CE3-4FB8-9AD6-4645B95A73FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{430FCB96-4518-4882-806F-8910B30959F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{430FCB96-4518-4882-806F-8910B30959F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{430FCB96-4518-4882-806F-8910B30959F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{430FCB96-4518-4882-806F-8910B30959F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://bopetersen.visualstudio.com/defaultcollection
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = 02350AdvancedDemo\\02350AdvancedDemo.csproj
-		SccProjectName1 = 02350AdvancedDemo
-		SccLocalPath1 = 02350AdvancedDemo
-		SccProjectUniqueName2 = 02350AdvancedDemo.Model\\02350AdvancedDemo.Model.csproj
-		SccProjectName2 = 02350AdvancedDemo.Model
-		SccLocalPath2 = 02350AdvancedDemo.Model
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {54A2495C-E079-433E-B376-F39B8F6B0009}
 	EndGlobalSection
 EndGlobal
