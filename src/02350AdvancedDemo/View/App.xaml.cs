@@ -1,11 +1,5 @@
-﻿using System.Windows;
+﻿namespace _02350AdvancedDemo.View;
 
-namespace _02350AdvancedDemo.View
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
-    {
-    }
 }

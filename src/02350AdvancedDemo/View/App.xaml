@@ -7,9 +7,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/BubbleCreme.xaml"/>
+                <ResourceDictionary Source="/Themes/ShinyBlue.xaml"/>
                 <ResourceDictionary>
-                    <ViewModel:ViewModelLocator x:Key="Locator" />
                     <DataTemplate DataType="{x:Type ViewModel:CircleViewModel}">
                         <Canvas>
                             <View:CircleUserControl/>

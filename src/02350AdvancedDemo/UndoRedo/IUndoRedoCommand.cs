@@ -1,8 +1,7 @@
-﻿namespace _02350AdvancedDemo.UndoRedo
+﻿namespace _02350AdvancedDemo.UndoRedo;
+
+public interface IUndoRedoCommand
 {
-    public interface IUndoRedoCommand
-    {
-        void Execute();
-        void UnExecute();
-    }
+    void Do();
+    void Undo();
 }

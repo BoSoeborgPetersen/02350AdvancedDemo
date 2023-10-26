@@ -1,15 +1,9 @@
-﻿using System.Windows.Controls.Ribbon;
+﻿namespace _02350AdvancedDemo.View;
 
-namespace _02350AdvancedDemo.View
+public partial class MainWindow : RibbonWindow
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : RibbonWindow
+    public MainWindow()
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

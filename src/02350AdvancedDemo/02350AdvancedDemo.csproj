@@ -1,50 +1,49 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <RootNamespace>_02350AdvancedDemo</RootNamespace>
-    <UseWPF>true</UseWPF>
-    <ApplicationIcon>Icon.ico</ApplicationIcon>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<RootNamespace>_02350AdvancedDemo</RootNamespace>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>true</ImplicitUsings>
+		<ApplicationIcon>Icon.ico</ApplicationIcon>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="Images\Help.png" />
-  </ItemGroup>
+	<ItemGroup>
+		<Using Include="_02350AdvancedDemo.Model" />
+		<Using Include="_02350AdvancedDemo.UndoRedo" />
+		<Using Include="_02350AdvancedDemo.Serialization" />
+		<Using Include="_02350AdvancedDemo.ViewModel" />
+		<Using Include="CommunityToolkit.Mvvm.ComponentModel" />
+		<Using Include="CommunityToolkit.Mvvm.Input" />
+		<Using Include="Microsoft.Win32" />
+		<Using Include="System.Collections" />
+		<Using Include="System.Collections.ObjectModel" />
+		<Using Include="System.IO" />
+		<Using Include="System.Text" />
+		<Using Include="System.Windows" />
+		<Using Include="System.Windows.Input" />
+		<Using Include="System.Windows.Media" />
+		<Using Include="System.Windows.Controls" />
+		<Using Include="System.Windows.Controls.Ribbon" />
+		<Using Include="System.Xml.Serialization" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ApplicationDefinition Include="View\App.xaml" />
-  </ItemGroup>
+	<ItemGroup>
+		<ApplicationDefinition Include="View\App.xaml" />
+	</ItemGroup>
 
-  <ItemGroup>
-	<PackageReference Include="CommonServiceLocator" Version="2.0.7" />
-	<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-	<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
-	<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-	<PackageReference Include="Unity" Version="5.11.10" />
-	<PackageReference Include="Unity.ServiceLocation" Version="5.11.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\02350AdvancedDemo.Model\02350AdvancedDemo.Model.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\02350AdvancedDemo.Model\02350AdvancedDemo.Model.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Resource Include="Images\*.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<Resource Include="Images\*.png" />
+		<Resource Include="Icon.ico" />
+	</ItemGroup>
 </Project>

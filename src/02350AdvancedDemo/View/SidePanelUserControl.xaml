@@ -3,6 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewmodel="clr-namespace:_02350AdvancedDemo.ViewModel"
+             d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="260">
     <Expander ExpandDirection="Left" Header="Sidebar">
@@ -14,10 +16,10 @@
                     <DataGrid x:Name="shapesControl" Height="140" ItemsSource="{Binding Shapes}" HeadersVisibility="Column" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Binding="{Binding Number}" Header="Number" Width="*" IsReadOnly="True"/>
-                            <DataGridTextColumn Binding="{Binding X}" Header="X" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Y}" Header="Y" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Width}" Header="Width" Width="*"/>
-                            <DataGridTextColumn Binding="{Binding Height}" Header="Height" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding Position.X}" Header="X" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding Position.Y}" Header="Y" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding Size.Width}" Header="Width" Width="*"/>
+                            <DataGridTextColumn Binding="{Binding Size.Height}" Header="Height" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                     <Button Content="Remove chosen shape" Command="{Binding RemoveShapesCommand}" CommandParameter="{Binding ElementName=shapesControl, Path=SelectedItems}"/>

@@ -1,27 +1,7 @@
-﻿using _02350AdvancedDemo.ViewModel;
-using System.Collections.ObjectModel;
+﻿namespace _02350AdvancedDemo.UndoRedo;
 
-namespace _02350AdvancedDemo.UndoRedo
+public record AddLineCommand(ObservableCollection<LineViewModel> Lines, LineViewModel Line) : IUndoRedoCommand
 {
-    public class AddLineCommand : IUndoRedoCommand
-    {
-        private ObservableCollection<LineViewModel> lines;
-        private LineViewModel line;
-        
-        public AddLineCommand(ObservableCollection<LineViewModel> _lines, LineViewModel _line) 
-        { 
-            lines = _lines;
-            line = _line;
-        }
-        
-        public void Execute()
-        {
-            lines.Add(line);
-        }
-        
-        public void UnExecute()
-        {
-            lines.Remove(line);
-        }
-    }
+    public void Do() => Lines.Add(Line);
+    public void Undo() => Lines.Remove(Line);
 }

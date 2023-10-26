@@ -1,15 +1,9 @@
-﻿using System.Windows.Controls;
+﻿namespace _02350AdvancedDemo.View;
 
-namespace _02350AdvancedDemo.View
+public partial class MenuUserControl : UserControl
 {
-    /// <summary>
-    /// Interaction logic for Menu.xaml
-    /// </summary>
-    public partial class Menu : UserControl
+    public MenuUserControl()
     {
-        public Menu()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -1,29 +1,7 @@
-﻿using _02350AdvancedDemo.ViewModel;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿namespace _02350AdvancedDemo.UndoRedo;
 
-namespace _02350AdvancedDemo.UndoRedo
+public record RemoveLinesCommand(ObservableCollection<LineViewModel> Lines, List<LineViewModel> LinesToRemove) : IUndoRedoCommand
 {
-    public class RemoveLinesCommand : IUndoRedoCommand
-    {
-        private ObservableCollection<LineViewModel> lines;
-        
-        private List<LineViewModel> linesToRemove;
-        
-        public RemoveLinesCommand(ObservableCollection<LineViewModel> _lines, List<LineViewModel> _linesToRemove) 
-        {
-            lines = _lines;
-            linesToRemove = _linesToRemove;
-        }
-        
-        public void Execute()
-        {
-            linesToRemove.ForEach(x => lines.Remove(x));
-        }
-        
-        public void UnExecute()
-        {
-            linesToRemove.ForEach(x => lines.Add(x));
-        }
-    }
+    public void Do() => LinesToRemove.ForEach(x => Lines.Remove(x));
+    public void Undo() => LinesToRemove.ForEach(x => Lines.Add(x));
 }

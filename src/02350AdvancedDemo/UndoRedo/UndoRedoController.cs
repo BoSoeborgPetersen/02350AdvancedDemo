@@ -1,51 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿namespace _02350AdvancedDemo.UndoRedo;
 
-namespace _02350AdvancedDemo.UndoRedo
+public class UndoRedoController
 {
-    public class UndoRedoController
+    public static UndoRedoController Instance { get; } = new();
+
+    private readonly Stack<IUndoRedoCommand> undoStack = new();
+    private readonly Stack<IUndoRedoCommand> redoStack = new();
+
+    private UndoRedoController() { }
+
+    public void AddAndExecute(IUndoRedoCommand command)
     {
-        public static UndoRedoController Instance { get; } = new UndoRedoController();
+        undoStack.Push(command);
+        redoStack.Clear();
+        command.Do();
+    }
 
-        private readonly Stack<IUndoRedoCommand> undoStack = new Stack<IUndoRedoCommand>();
-        private readonly Stack<IUndoRedoCommand> redoStack = new Stack<IUndoRedoCommand>();
+    public bool CanUndo(string steps) => undoStack.Count >= (steps == null ? 1 : int.Parse(steps));
 
-        private UndoRedoController() { }
-
-        public void AddAndExecute(IUndoRedoCommand command)
+    public void Undo(string steps)
+    {
+        if (!CanUndo(steps)) throw new InvalidOperationException();
+        int s = steps == null ? 1 : int.Parse(steps);
+        for (int i = 0; i < s; i++)
         {
+            IUndoRedoCommand command = undoStack.Pop();
+            redoStack.Push(command);
+            command.Undo();
+        }
+    }
+
+    public bool CanRedo(string steps) => redoStack.Count >= (steps == null ? 1 : int.Parse(steps));
+
+    public void Redo(string steps)
+    {
+        if (!CanRedo(steps)) throw new InvalidOperationException();
+        int s = steps == null ? 1 : int.Parse(steps);
+        for (int i = 0; i < s; i++)
+        {
+            IUndoRedoCommand command = redoStack.Pop();
             undoStack.Push(command);
-            redoStack.Clear();
-            command.Execute();
-        }
-
-        public bool CanUndo(string steps) => undoStack.Count() >= (steps == null ? 1 : int.Parse(steps));
-
-        public void Undo(string steps)
-        {
-            if (!CanUndo(steps)) throw new InvalidOperationException();
-            int s = steps == null ? 1 : int.Parse(steps);
-            for (int i = 0; i < s; i++)
-            {
-                IUndoRedoCommand command = undoStack.Pop();
-                redoStack.Push(command);
-                command.UnExecute();
-            }
-        }
-
-        public bool CanRedo(string steps) => redoStack.Count() >= (steps == null ? 1 : int.Parse(steps));
-
-        public void Redo(string steps)
-        {
-            if (!CanRedo(steps)) throw new InvalidOperationException();
-            int s = steps == null ? 1 : int.Parse(steps);
-            for(int i = 0; i < s; i++)
-            {
-                IUndoRedoCommand command = redoStack.Pop();
-                undoStack.Push(command);
-                command.Execute();
-            }
+            command.Do();
         }
     }
 }

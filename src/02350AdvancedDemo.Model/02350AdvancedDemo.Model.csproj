@@ -1,14 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0-windows</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-	  <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<UseWPF>true</UseWPF>
+		<ImplicitUsings>true</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
-	  <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" PrivateAssets="All" />
-  </ItemGroup>
+	<ItemGroup>
+		<Using Include="System.Windows"/>
+		<Using Include="System.Xml.Serialization"/>
+	</ItemGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+	</ItemGroup>
 
 </Project>

@@ -1,27 +1,7 @@
-﻿using _02350AdvancedDemo.ViewModel;
-using System.Collections.ObjectModel;
+﻿namespace _02350AdvancedDemo.UndoRedo;
 
-namespace _02350AdvancedDemo.UndoRedo
+public record AddShapeCommand(ObservableCollection<ShapeViewModel> Shapes, ShapeViewModel Shape) : IUndoRedoCommand
 {
-    public class AddShapeCommand : IUndoRedoCommand
-    {
-        private ObservableCollection<ShapeViewModel> shapes;
-        private ShapeViewModel shape;
-
-        public AddShapeCommand(ObservableCollection<ShapeViewModel> _shapes, ShapeViewModel _shape) 
-        { 
-            shapes = _shapes;
-            shape = _shape;
-        }
-
-        public void Execute()
-        {
-            shapes.Add(shape);
-        }
-        
-        public void UnExecute()
-        {
-            shapes.Remove(shape);
-        }
-    }
+    public void Do() => Shapes.Add(Shape);
+    public void Undo() => Shapes.Remove(Shape);
 }

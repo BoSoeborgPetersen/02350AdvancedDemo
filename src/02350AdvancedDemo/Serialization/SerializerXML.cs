@@ -1,79 +1,48 @@
-﻿using _02350AdvancedDemo.Model;
-using System.IO;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿namespace _02350AdvancedDemo.Serialization;
 
-namespace _02350AdvancedDemo.Serialization
+public static class SerializerXML
 {
-    public class SerializerXML
+    public static async void AsyncSerializeToFile(Diagram diagram, string path) => 
+        await Task.Run(() => SerializeToFile(diagram, path));
+
+    private static void SerializeToFile(Diagram diagram, string path)
     {
-        public static SerializerXML Instance { get; } = new SerializerXML();
+        using FileStream stream = File.Create(path);
+        XmlSerializer serializer = new(typeof(Diagram));
+        serializer.Serialize(stream, diagram);
+    }
 
-        private SerializerXML() { }
+    public static Task<Diagram> AsyncDeserializeFromFile(string path) => 
+        Task.Run(() => DeserializeFromFile(path));
 
-        public async void AsyncSerializeToFile(Diagram diagram, string path)
-        {
-            await Task.Run(() => SerializeToFile(diagram, path));
-        }
+    private static Diagram DeserializeFromFile(string path)
+    {
+        using FileStream stream = File.OpenRead(path);
+        XmlSerializer serializer = new(typeof(Diagram));
+        return serializer.Deserialize(stream) as Diagram;
+    }
 
-        private void SerializeToFile(Diagram diagram, string path)
-        {
-            using(FileStream stream = File.Create(path))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(Diagram));
-                serializer.Serialize(stream, diagram);
-            }
-        }
+    public static Task<string> AsyncSerializeToString(Diagram diagram) => 
+        Task.Run(() => SerializeToString(diagram));
 
-        public Task<Diagram> AsyncDeserializeFromFile(string path)
-        {
-            return Task.Run(() => DeserializeFromFile(path));
-        }
+    private static string SerializeToString(Diagram diagram)
+    {
+        var stringBuilder = new StringBuilder();
 
-        private Diagram DeserializeFromFile(string path)
-        {
-            using (FileStream stream = File.OpenRead(path))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(Diagram));
-                Diagram diagram = serializer.Deserialize(stream) as Diagram;
+        using TextWriter stream = new StringWriter(stringBuilder);
+        XmlSerializer serializer = new(typeof(Diagram));
+        serializer.Serialize(stream, diagram);
 
-                return diagram;
-            }
-        }
+        return stringBuilder.ToString();
+    }
 
-        public Task<string> AsyncSerializeToString(Diagram diagram)
-        {
-            return Task.Run(() => SerializeToString(diagram));
-        }
+    public static Task<Diagram> AsyncDeserializeFromString(string xml) => 
+        Task.Run(() => DeserializeFromString(xml));
 
-        private string SerializeToString(Diagram diagram)
-        {
-            var stringBuilder = new StringBuilder();
-
-            using (TextWriter stream = new StringWriter(stringBuilder))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(Diagram));
-                serializer.Serialize(stream, diagram);
-            }
-
-            return stringBuilder.ToString();
-        }
-
-        public Task<Diagram> AsyncDeserializeFromString(string xml)
-        {
-            return Task.Run(() => DeserializeFromString(xml));
-        }
-
-        private Diagram DeserializeFromString(string xml)
-        {
-            using (TextReader stream = new StringReader(xml))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(Diagram));
-                Diagram diagram = serializer.Deserialize(stream) as Diagram;
-
-                return diagram;
-            }
-        }
+    private static Diagram DeserializeFromString(string xml)
+    {
+        using TextReader stream = new StringReader(xml);
+        XmlSerializer serializer = new(typeof(Diagram));
+        return serializer.Deserialize(stream) as Diagram;
     }
 }

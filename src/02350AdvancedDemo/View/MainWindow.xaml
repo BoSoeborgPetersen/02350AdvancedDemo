@@ -3,8 +3,11 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
               xmlns:View="clr-namespace:_02350AdvancedDemo.View"
-              DataContext="{Binding Source={StaticResource Locator}, Path=Main}"
-        Title="02350 Advanced Demo" Height="600" Width="800">
+              xmlns:ViewModel="clr-namespace:_02350AdvancedDemo.ViewModel"
+              Title="02350 Advanced Demo" Height="600" Width="800" Icon="/Icon.ico">
+    <Window.DataContext>
+        <ViewModel:MainViewModel />
+    </Window.DataContext>
     <Window.InputBindings>
         <KeyBinding Command="{Binding NewDiagramCommand}" Gesture="CTRL+N"/>
         <KeyBinding Command="{Binding OpenDiagramCommand}" Gesture="CTRL+O"/>
@@ -16,7 +19,7 @@
         <KeyBinding Command="{Binding PasteCommand}" Gesture="CTRL+V"/>
     </Window.InputBindings>
     <DockPanel>
-        <View:Menu DockPanel.Dock="Top"/>
+        <View:MenuUserControl DockPanel.Dock="Top"/>
         <View:SidePanelUserControl/>
         <StackPanel DockPanel.Dock="Bottom">
             <Slider x:Name="zoomSlider" ToolTip="Zoom" Value="1" Minimum="0.1" Maximum="10"/>

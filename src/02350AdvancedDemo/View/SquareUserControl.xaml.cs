@@ -1,15 +1,9 @@
-﻿using System.Windows.Controls;
+﻿namespace _02350AdvancedDemo.View;
 
-namespace _02350AdvancedDemo.View
+public partial class SquareUserControl : UserControl
 {
-    /// <summary>
-    /// Interaction logic for SquareUserControl.xaml
-    /// </summary>
-    public partial class SquareUserControl : UserControl
+    public SquareUserControl()
     {
-        public SquareUserControl()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
