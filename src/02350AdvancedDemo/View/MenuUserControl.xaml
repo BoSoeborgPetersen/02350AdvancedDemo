@@ -90,7 +90,6 @@
         <RibbonTab Header="UML" KeyTip="U">
         </RibbonTab>
         <!-- Ribbon Tab #3: -->
-        <RibbonTab Header="Something?">
-        </RibbonTab>
+        <RibbonTab Header="Something?" />
     </Ribbon>
 </UserControl>

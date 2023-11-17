@@ -1,5 +1,3 @@
-﻿using System.Windows.Media.Media3D;
-
 namespace _02350AdvancedDemo.ViewModel;
 
 public abstract partial class ShapeViewModel : BaseViewModel
@@ -30,7 +28,7 @@ public abstract partial class ShapeViewModel : BaseViewModel
 
     private void Remove()
     {
-        undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, new List<ShapeViewModel>() { this }));
+        undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, [this]));
     }
 
     public override string ToString() => Number.ToString();

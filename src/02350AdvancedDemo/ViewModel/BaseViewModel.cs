@@ -1,61 +1,30 @@
-﻿namespace _02350AdvancedDemo.ViewModel;
+namespace _02350AdvancedDemo.ViewModel;
 
-public abstract class BaseViewModel : ObservableObject
+public abstract partial class BaseViewModel : ObservableObject
 {
     protected UndoRedoController undoRedoController = UndoRedoController.Instance;
     public DialogViews DialogVM { get; set; } = new();
 
-    protected static bool isAddingLine;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ModeOpacity))]
+    protected bool isAddingLine;
     protected static Type addingLineType;
     protected static ShapeViewModel addingLineFrom;
-    public double ModeOpacity => isAddingLine ? 0.4 : 1.0;
+    public double ModeOpacity => IsAddingLine ? 0.4 : 1.0;
 
     public static ObservableCollection<ShapeViewModel> Shapes { get; set; }
     public static ObservableCollection<LineViewModel> Lines { get; set; }
 
-    public ICommand NewDiagramCommand { get; }
-    public ICommand OpenDiagramCommand { get; }
-    public ICommand SaveDiagramCommand { get; }
-
     public ICommand UndoCommand { get; }
     public ICommand RedoCommand { get; }
 
-    public ICommand CutCommand { get; set; }
-    public ICommand CopyCommand { get; set; }
-    public ICommand PasteCommand { get; set; }
-
-    public ICommand ExitCommand { get; set; }
-
-    public ICommand AddCircleCommand { get; }
-    public ICommand AddSquareCommand { get; }
-    public ICommand AddLineCommand { get; }
-    public ICommand AddDashLineCommand { get; }
-    public ICommand RemoveShapesCommand { get; }
-    public ICommand RemoveLinesCommand { get; }
-
     public BaseViewModel()
     {
-        NewDiagramCommand = new RelayCommand(NewDiagram);
-        OpenDiagramCommand = new RelayCommand(OpenDiagram);
-        SaveDiagramCommand = new RelayCommand(SaveDiagram);
-
         UndoCommand = new RelayCommand<string>(undoRedoController.Undo, undoRedoController.CanUndo);
         RedoCommand = new RelayCommand<string>(undoRedoController.Redo, undoRedoController.CanRedo);
-
-        CutCommand = new RelayCommand(Cut);
-        CopyCommand = new RelayCommand(Copy);
-        PasteCommand = new RelayCommand(Paste);
-
-        ExitCommand = new RelayCommand(Exit);
-
-        AddCircleCommand = new RelayCommand(AddCircle);
-        AddSquareCommand = new RelayCommand(AddSquare);
-        AddLineCommand = new RelayCommand(AddLine);
-        AddDashLineCommand = new RelayCommand(AddDashLine);
-        RemoveShapesCommand = new RelayCommand<IList>(RemoveShapes, CanRemoveShapes);
-        RemoveLinesCommand = new RelayCommand<IList>(RemoveLines, CanRemoveLines);
     }
 
+    [RelayCommand]
     private void NewDiagram()
     {
         if (DialogViews.ShowNew())
@@ -65,7 +34,8 @@ public abstract class BaseViewModel : ObservableObject
         }
     }
 
-    private async void OpenDiagram()
+    [RelayCommand]
+    private async Task OpenDiagram()
     {
         string path = DialogViews.ShowOpen();
         if (path != null)
@@ -86,6 +56,7 @@ public abstract class BaseViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
     private void SaveDiagram()
     {
         string path = DialogViews.ShowSave();
@@ -96,7 +67,8 @@ public abstract class BaseViewModel : ObservableObject
         }
     }
 
-    private async void Cut()
+    [RelayCommand]
+    private async Task Cut()
     {
         var selectedShapes = Shapes.Where(x => x.IsMoveSelected).ToList();
         var selectedLines = Lines.Where(x => x.From.IsMoveSelected || x.To.IsMoveSelected).ToList();
@@ -110,7 +82,8 @@ public abstract class BaseViewModel : ObservableObject
         Clipboard.SetText(xml);
     }
 
-    private async void Copy()
+    [RelayCommand]
+    private async Task Copy()
     {
         var selectedShapes = Shapes.Where(x => x.IsMoveSelected).ToList();
         var selectedLines = Lines.Where(x => x.From.IsMoveSelected || x.To.IsMoveSelected).ToList();
@@ -122,7 +95,8 @@ public abstract class BaseViewModel : ObservableObject
         Clipboard.SetText(xml);
     }
 
-    private async void Paste()
+    [RelayCommand]
+    private async Task Paste()
     {
         var xml = Clipboard.GetText();
 
@@ -153,7 +127,7 @@ public abstract class BaseViewModel : ObservableObject
         // Add shapes and lines (TODO: Should use undo/redo command).
         //undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new CircleViewModel(new Circle())));
         //undoRedoController.AddAndExecute(new AddLineCommand(Lines, lineToAdd));
-        shapes.ForEach(s => Shapes.Add(s is Circle ? (ShapeViewModel)new CircleViewModel(s) { IsMoveSelected = true } : new SquareViewModel(s) { IsMoveSelected = true }));
+        shapes.ForEach(s => Shapes.Add(s is Circle ? new CircleViewModel(s) { IsMoveSelected = true } : new SquareViewModel(s) { IsMoveSelected = true }));
         lines.ForEach(l => Lines.Add(new LineViewModel(l)));
 
         // Reconstruct object graph.
@@ -164,46 +138,36 @@ public abstract class BaseViewModel : ObservableObject
         }
     }
 
-    private void Exit()
-    {
-        Application.Current.Shutdown();
-    }
+    [RelayCommand]
+    private void Exit() => Application.Current.Shutdown();
 
-    private void AddCircle()
-    {
-        undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new CircleViewModel(new Circle())));
-    }
+    [RelayCommand]
+    private void AddCircle() => undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new CircleViewModel(new Circle())));
 
-    private void AddSquare()
-    {
-        undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new SquareViewModel(new Square())));
-    }
+    [RelayCommand]
+    private void AddSquare() => undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new SquareViewModel(new Square())));
 
+    [RelayCommand]
     private void AddLine()
     {
-        isAddingLine = true;
+        IsAddingLine = true;
         addingLineType = typeof(Line);
-        OnPropertyChanged(nameof(ModeOpacity));
     }
 
+    [RelayCommand]
     private void AddDashLine()
     {
-        isAddingLine = true;
+        IsAddingLine = true;
         addingLineType = typeof(DashLine);
-        OnPropertyChanged(nameof(ModeOpacity));
     }
 
     private bool CanRemoveShapes(IList _shapes) => _shapes.Count == 1;
 
-    private void RemoveShapes(IList _shapes)
-    {
-        undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, _shapes.Cast<ShapeViewModel>().ToList()));
-    }
+    [RelayCommand(CanExecute = nameof(CanRemoveShapes))]
+    private void RemoveShapes(IList _shapes) => undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, _shapes.Cast<ShapeViewModel>().ToList()));
 
     private bool CanRemoveLines(IList _edges) => _edges.Count >= 1;
 
-    private void RemoveLines(IList _lines)
-    {
-        undoRedoController.AddAndExecute(new RemoveLinesCommand(Lines, _lines.Cast<LineViewModel>().ToList()));
-    }
+    [RelayCommand(CanExecute = nameof(CanRemoveLines))]
+    private void RemoveLines(IList _lines) => undoRedoController.AddAndExecute(new RemoveLinesCommand(Lines, _lines.Cast<LineViewModel>().ToList()));
 }

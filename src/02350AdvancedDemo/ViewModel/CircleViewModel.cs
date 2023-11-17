@@ -1,6 +1,5 @@
 ﻿namespace _02350AdvancedDemo.ViewModel;
 
-public class CircleViewModel : ShapeViewModel
+public class CircleViewModel(Shape _shape) : ShapeViewModel(_shape)
 {
-    public CircleViewModel(Shape _shape) : base(_shape) { }
 }

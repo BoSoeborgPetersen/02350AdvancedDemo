@@ -1,6 +1,5 @@
 ﻿namespace _02350AdvancedDemo.ViewModel;
 
-public class SquareViewModel : ShapeViewModel
+public class SquareViewModel(Shape _shape) : ShapeViewModel(_shape)
 {
-    public SquareViewModel(Shape _shape) : base(_shape) { }
 }

@@ -57,7 +57,7 @@
                             </DataGridComboBoxColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Remove chosen lines" Command="{Binding RemoveLinesCommand}" CommandParameter="{Binding ElementName=linesControl, Path=SelectedItems}"/>
+                    <Button Content="Remove chosen lines" Command="{Binding RemoveLinesCommand}" CommandParameter="{Binding SelectedItems, ElementName=linesControl}"/>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
