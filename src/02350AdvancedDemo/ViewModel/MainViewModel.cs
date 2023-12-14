@@ -2,19 +2,19 @@
 
 public partial class MainViewModel : BaseViewModel
 {
-    private Point initialMousePosition;
-    private readonly Dictionary<int, Point> initialShapePositions = [];
+    Point initialMousePosition;
+    readonly Dictionary<int, Point> initialShapePositions = [];
 
-    private Point SelectionBoxStart;
+    Point SelectionBoxStart;
 
     [ObservableProperty]
-    private double selectionBoxX;
+    double selectionBoxX;
     [ObservableProperty]
-    private double selectionBoxY;
+    double selectionBoxY;
     [ObservableProperty]
-    private double selectionBoxWidth;
+    double selectionBoxWidth;
     [ObservableProperty]
-    private double selectionBoxHeight;
+    double selectionBoxHeight;
 
     public MainViewModel() : base()
     {
@@ -29,7 +29,7 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void MouseDownShape(MouseButtonEventArgs e)
+    void MouseDownShape(MouseButtonEventArgs e)
     {
         if (!IsAddingLine)
         {
@@ -50,7 +50,7 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void MouseMoveShape(MouseEventArgs e)
+    void MouseMoveShape(MouseEventArgs e)
     {
         if (Mouse.Captured != null && !IsAddingLine)
         {
@@ -70,7 +70,7 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void MouseUpShape(MouseButtonEventArgs e)
+    void MouseUpShape(MouseButtonEventArgs e)
     {
         if (IsAddingLine)
         {
@@ -113,7 +113,7 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void MouseDownCanvas(MouseButtonEventArgs e)
+    void MouseDownCanvas(MouseButtonEventArgs e)
     {
         if (!IsAddingLine)
         {
@@ -123,7 +123,7 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void MouseMoveCanvas(MouseEventArgs e)
+    void MouseMoveCanvas(MouseEventArgs e)
     {
         if (Mouse.Captured != null && !IsAddingLine)
         {
@@ -136,7 +136,7 @@ public partial class MainViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void MouseUpCanvas(MouseButtonEventArgs e)
+    void MouseUpCanvas(MouseButtonEventArgs e)
     {
         if (!IsAddingLine)
         {
@@ -153,20 +153,20 @@ public partial class MainViewModel : BaseViewModel
         }
     }
 
-    private ShapeViewModel TargetShape(MouseEventArgs e)
+    ShapeViewModel TargetShape(MouseEventArgs e)
     {
         var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
         return (ShapeViewModel)shapeVisualElement.DataContext;
     }
 
-    private Point RelativeMousePosition(MouseEventArgs e)
+    Point RelativeMousePosition(MouseEventArgs e)
     {
         var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
         var canvas = FindParentOfType<Canvas>(shapeVisualElement);
         return Mouse.GetPosition(canvas);
     }
 
-    private static T FindParentOfType<T>(DependencyObject o)
+    static T FindParentOfType<T>(DependencyObject o)
     {
         dynamic parent = VisualTreeHelper.GetParent(o);
         return parent.GetType().IsAssignableFrom(typeof(T)) ? parent : FindParentOfType<T>(parent);

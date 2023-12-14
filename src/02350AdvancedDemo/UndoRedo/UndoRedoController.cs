@@ -4,10 +4,10 @@ public class UndoRedoController
 {
     public static UndoRedoController Instance { get; } = new();
 
-    private readonly Stack<IUndoRedoCommand> undoStack = new();
-    private readonly Stack<IUndoRedoCommand> redoStack = new();
+    readonly Stack<IUndoRedoCommand> undoStack = new();
+    readonly Stack<IUndoRedoCommand> redoStack = new();
 
-    private UndoRedoController() { }
+    UndoRedoController() { }
 
     public void AddAndExecute(IUndoRedoCommand command)
     {

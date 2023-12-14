@@ -2,8 +2,8 @@
 
 public class LineViewModel(Line _line) : BaseViewModel()
 {
-    private ShapeViewModel from;
-    private ShapeViewModel to;
+    ShapeViewModel from;
+    ShapeViewModel to;
     public Line Line { get; set; } = _line;
     public ShapeViewModel From { get { return from; } set { from = value; Line.FromNumber = value?.Number ?? 0; OnPropertyChanged(); } }
     public ShapeViewModel To { get { return to; } set { to = value; Line.ToNumber = value?.Number ?? 0; OnPropertyChanged(); } }

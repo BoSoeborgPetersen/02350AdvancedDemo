@@ -4,7 +4,7 @@
 [XmlInclude(typeof(Square))]
 public abstract class Shape
 {
-    private static int counter = 0;
+    static int counter = 0;
     public int Number { get; set; } = ++counter;
 
     public Point Position { get; set; } = new(200, 200);

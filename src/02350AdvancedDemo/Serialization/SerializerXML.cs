@@ -5,7 +5,7 @@ public static class SerializerXML
     public static async void AsyncSerializeToFile(Diagram diagram, string path) => 
         await Task.Run(() => SerializeToFile(diagram, path));
 
-    private static void SerializeToFile(Diagram diagram, string path)
+    static void SerializeToFile(Diagram diagram, string path)
     {
         using FileStream stream = File.Create(path);
         XmlSerializer serializer = new(typeof(Diagram));
@@ -15,7 +15,7 @@ public static class SerializerXML
     public static Task<Diagram> AsyncDeserializeFromFile(string path) => 
         Task.Run(() => DeserializeFromFile(path));
 
-    private static Diagram DeserializeFromFile(string path)
+    static Diagram DeserializeFromFile(string path)
     {
         using FileStream stream = File.OpenRead(path);
         XmlSerializer serializer = new(typeof(Diagram));
@@ -25,7 +25,7 @@ public static class SerializerXML
     public static Task<string> AsyncSerializeToString(Diagram diagram) => 
         Task.Run(() => SerializeToString(diagram));
 
-    private static string SerializeToString(Diagram diagram)
+    static string SerializeToString(Diagram diagram)
     {
         var stringBuilder = new StringBuilder();
 
@@ -39,7 +39,7 @@ public static class SerializerXML
     public static Task<Diagram> AsyncDeserializeFromString(string xml) => 
         Task.Run(() => DeserializeFromString(xml));
 
-    private static Diagram DeserializeFromString(string xml)
+    static Diagram DeserializeFromString(string xml)
     {
         using TextReader stream = new StringReader(xml);
         XmlSerializer serializer = new(typeof(Diagram));

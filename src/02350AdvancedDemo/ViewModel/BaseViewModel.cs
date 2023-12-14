@@ -7,7 +7,7 @@ public abstract partial class BaseViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ModeOpacity))]
-    protected bool isAddingLine;
+    bool isAddingLine;
     protected static Type addingLineType;
     protected static ShapeViewModel addingLineFrom;
     public double ModeOpacity => IsAddingLine ? 0.4 : 1.0;
@@ -25,7 +25,7 @@ public abstract partial class BaseViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void NewDiagram()
+    void NewDiagram()
     {
         if (DialogViews.ShowNew())
         {
@@ -35,7 +35,7 @@ public abstract partial class BaseViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task OpenDiagram()
+    async Task OpenDiagram()
     {
         string path = DialogViews.ShowOpen();
         if (path != null)
@@ -57,7 +57,7 @@ public abstract partial class BaseViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void SaveDiagram()
+    void SaveDiagram()
     {
         string path = DialogViews.ShowSave();
         if (path != null)
@@ -68,7 +68,7 @@ public abstract partial class BaseViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task Cut()
+    async Task Cut()
     {
         var selectedShapes = Shapes.Where(x => x.IsMoveSelected).ToList();
         var selectedLines = Lines.Where(x => x.From.IsMoveSelected || x.To.IsMoveSelected).ToList();
@@ -83,7 +83,7 @@ public abstract partial class BaseViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task Copy()
+    async Task Copy()
     {
         var selectedShapes = Shapes.Where(x => x.IsMoveSelected).ToList();
         var selectedLines = Lines.Where(x => x.From.IsMoveSelected || x.To.IsMoveSelected).ToList();
@@ -96,7 +96,7 @@ public abstract partial class BaseViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task Paste()
+    async Task Paste()
     {
         var xml = Clipboard.GetText();
 
@@ -139,35 +139,35 @@ public abstract partial class BaseViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void Exit() => Application.Current.Shutdown();
+    void Exit() => Application.Current.Shutdown();
 
     [RelayCommand]
-    private void AddCircle() => undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new CircleViewModel(new Circle())));
+    void AddCircle() => undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new CircleViewModel(new Circle())));
 
     [RelayCommand]
-    private void AddSquare() => undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new SquareViewModel(new Square())));
+    void AddSquare() => undoRedoController.AddAndExecute(new AddShapeCommand(Shapes, new SquareViewModel(new Square())));
 
     [RelayCommand]
-    private void AddLine()
+    void AddLine()
     {
         IsAddingLine = true;
         addingLineType = typeof(Line);
     }
 
     [RelayCommand]
-    private void AddDashLine()
+    void AddDashLine()
     {
         IsAddingLine = true;
         addingLineType = typeof(DashLine);
     }
 
-    private bool CanRemoveShapes(IList _shapes) => _shapes.Count == 1;
+    bool CanRemoveShapes(IList _shapes) => _shapes.Count == 1;
 
     [RelayCommand(CanExecute = nameof(CanRemoveShapes))]
-    private void RemoveShapes(IList _shapes) => undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, _shapes.Cast<ShapeViewModel>().ToList()));
+    void RemoveShapes(IList _shapes) => undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, _shapes.Cast<ShapeViewModel>().ToList()));
 
-    private bool CanRemoveLines(IList _edges) => _edges.Count >= 1;
+    bool CanRemoveLines(IList _edges) => _edges.Count >= 1;
 
     [RelayCommand(CanExecute = nameof(CanRemoveLines))]
-    private void RemoveLines(IList _lines) => undoRedoController.AddAndExecute(new RemoveLinesCommand(Lines, _lines.Cast<LineViewModel>().ToList()));
+    void RemoveLines(IList _lines) => undoRedoController.AddAndExecute(new RemoveLinesCommand(Lines, _lines.Cast<LineViewModel>().ToList()));
 }
