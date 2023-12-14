@@ -1,6 +1,6 @@
 ﻿namespace _02350AdvancedDemo.Model;
 
-[XmlInclude(typeof(DashLine))]
+[JsonDerivedType(typeof(DashLine))]
 public class Line
 {
     public int FromNumber { get; set; }

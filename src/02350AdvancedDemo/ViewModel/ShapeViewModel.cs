@@ -28,7 +28,7 @@ public abstract partial class ShapeViewModel : BaseViewModel
 
     void Remove()
     {
-        undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, [this]));
+        undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, [this], Lines.Where(l => Number == l.From.Number || Number == l.To.Number).ToList()));
     }
 
     public override string ToString() => Number.ToString();

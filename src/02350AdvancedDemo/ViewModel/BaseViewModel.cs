@@ -1,3 +1,6 @@
+using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+
 namespace _02350AdvancedDemo.ViewModel;
 
 public abstract partial class BaseViewModel : ObservableObject
@@ -15,14 +18,15 @@ public abstract partial class BaseViewModel : ObservableObject
     public static ObservableCollection<ShapeViewModel> Shapes { get; set; }
     public static ObservableCollection<LineViewModel> Lines { get; set; }
 
-    public ICommand UndoCommand { get; }
-    public ICommand RedoCommand { get; }
+    bool CanUndo(string s) => undoRedoController.CanUndo(s == null ? 1 : int.Parse(s));
 
-    public BaseViewModel()
-    {
-        UndoCommand = new RelayCommand<string>(undoRedoController.Undo, undoRedoController.CanUndo);
-        RedoCommand = new RelayCommand<string>(undoRedoController.Redo, undoRedoController.CanRedo);
-    }
+    [RelayCommand(CanExecute = nameof(CanUndo))]
+    void Undo(string s) => undoRedoController.Undo(s == null ? 1 : int.Parse(s));
+
+    bool CanRedo(string s) => undoRedoController.CanRedo(s == null ? 1 : int.Parse(s));
+
+    [RelayCommand(CanExecute = nameof(CanRedo))]
+    void Redo(string s) => undoRedoController.Redo(s == null ? 1 : int.Parse(s));
 
     [RelayCommand]
     void NewDiagram()
@@ -40,7 +44,8 @@ public abstract partial class BaseViewModel : ObservableObject
         string path = DialogViews.ShowOpen();
         if (path != null)
         {
-            Diagram diagram = await SerializerXML.AsyncDeserializeFromFile(path);
+            var json = File.ReadAllText(path);
+            var diagram = JsonSerializer.Deserialize<Diagram>(json);
 
             Shapes.Clear();
             diagram.Shapes.Select(x => x is Circle ? (ShapeViewModel)new CircleViewModel(x) : new SquareViewModel(x)).ToList().ForEach(x => Shapes.Add(x));
@@ -63,7 +68,8 @@ public abstract partial class BaseViewModel : ObservableObject
         if (path != null)
         {
             Diagram diagram = new() { Shapes = Shapes.Select(x => x.Shape).ToList(), Lines = Lines.Select(x => x.Line).ToList() };
-            SerializerXML.AsyncSerializeToFile(diagram, path);
+            var json = JsonSerializer.Serialize(diagram);
+            File.WriteAllText(path, json);
         }
     }
 
@@ -73,13 +79,13 @@ public abstract partial class BaseViewModel : ObservableObject
         var selectedShapes = Shapes.Where(x => x.IsMoveSelected).ToList();
         var selectedLines = Lines.Where(x => x.From.IsMoveSelected || x.To.IsMoveSelected).ToList();
 
-        undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, selectedShapes));
+        undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, selectedShapes, Lines.Where(l => selectedShapes.Any(s => s.Number == l.From.Number || s.Number == l.To.Number)).ToList()));
 
         Diagram diagram = new() { Shapes = selectedShapes.Select(x => x.Shape).ToList(), Lines = selectedLines.Select(x => x.Line).ToList() };
 
-        var xml = await SerializerXML.AsyncSerializeToString(diagram);
+        var json = JsonSerializer.Serialize(diagram);
 
-        Clipboard.SetText(xml);
+        Clipboard.SetText(json);
     }
 
     [RelayCommand]
@@ -90,17 +96,17 @@ public abstract partial class BaseViewModel : ObservableObject
 
         Diagram diagram = new() { Shapes = selectedShapes.Select(x => x.Shape).ToList(), Lines = selectedLines.Select(x => x.Line).ToList() };
 
-        var xml = await SerializerXML.AsyncSerializeToString(diagram);
+        var json = JsonSerializer.Serialize(diagram);
 
-        Clipboard.SetText(xml);
+        Clipboard.SetText(json);
     }
 
     [RelayCommand]
     async Task Paste()
     {
-        var xml = Clipboard.GetText();
+        var json = Clipboard.GetText();
 
-        var diagram = await SerializerXML.AsyncDeserializeFromString(xml);
+        var diagram = JsonSerializer.Deserialize<Diagram>(json);
 
         var shapes = diagram.Shapes;
         var lines = diagram.Lines;
@@ -164,7 +170,7 @@ public abstract partial class BaseViewModel : ObservableObject
     bool CanRemoveShapes(IList _shapes) => _shapes.Count == 1;
 
     [RelayCommand(CanExecute = nameof(CanRemoveShapes))]
-    void RemoveShapes(IList _shapes) => undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, _shapes.Cast<ShapeViewModel>().ToList()));
+    void RemoveShapes(IList _shapes) => undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, _shapes.Cast<ShapeViewModel>().ToList(), Lines.Where(l => _shapes.Cast<ShapeViewModel>().Any(s => s.Number == l.From.Number || s.Number == l.To.Number)).ToList()));
 
     bool CanRemoveLines(IList _edges) => _edges.Count >= 1;
 

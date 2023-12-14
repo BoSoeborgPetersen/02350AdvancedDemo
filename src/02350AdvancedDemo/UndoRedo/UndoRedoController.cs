@@ -2,10 +2,10 @@
 
 public class UndoRedoController
 {
-    public static UndoRedoController Instance { get; } = new();
-
     readonly Stack<IUndoRedoCommand> undoStack = new();
     readonly Stack<IUndoRedoCommand> redoStack = new();
+
+    public static UndoRedoController Instance { get; } = new();
 
     UndoRedoController() { }
 
@@ -14,33 +14,40 @@ public class UndoRedoController
         undoStack.Push(command);
         redoStack.Clear();
         command.Do();
+        SendUndoRedoChangedMessage();
     }
 
-    public bool CanUndo(string steps) => undoStack.Count >= (steps == null ? 1 : int.Parse(steps));
+    public bool CanUndo(int count) => undoStack.Count >= count;
 
-    public void Undo(string steps)
+    public void Undo(int count)
     {
-        if (!CanUndo(steps)) throw new InvalidOperationException();
-        int s = steps == null ? 1 : int.Parse(steps);
-        for (int i = 0; i < s; i++)
+        if (CanUndo(count))
         {
-            IUndoRedoCommand command = undoStack.Pop();
-            redoStack.Push(command);
-            command.Undo();
+            for(int i = 0; i < count; i++)
+            {
+                var command = undoStack.Pop();
+                redoStack.Push(command);
+                command.Undo();
+                SendUndoRedoChangedMessage();
+            }
         }
     }
 
-    public bool CanRedo(string steps) => redoStack.Count >= (steps == null ? 1 : int.Parse(steps));
+    public bool CanRedo(int count) => redoStack.Count >= count;
 
-    public void Redo(string steps)
+    public void Redo(int count)
     {
-        if (!CanRedo(steps)) throw new InvalidOperationException();
-        int s = steps == null ? 1 : int.Parse(steps);
-        for (int i = 0; i < s; i++)
+        if (CanRedo(count))
         {
-            IUndoRedoCommand command = redoStack.Pop();
-            undoStack.Push(command);
-            command.Do();
+            for (int i = 0; i < count; i++)
+            {
+                var command = redoStack.Pop();
+                undoStack.Push(command);
+                command.Do();
+                SendUndoRedoChangedMessage();
+            }
         }
     }
+
+    void SendUndoRedoChangedMessage() => WeakReferenceMessenger.Default.Send(new UndoRedoChangedMessage());
 }

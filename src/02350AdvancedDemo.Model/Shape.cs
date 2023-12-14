@@ -1,7 +1,7 @@
 ﻿namespace _02350AdvancedDemo.Model;
 
-[XmlInclude(typeof(Circle))]
-[XmlInclude(typeof(Square))]
+[JsonDerivedType(typeof(Circle), nameof(Circle))]
+[JsonDerivedType(typeof(Square), nameof(Square))]
 public abstract class Shape
 {
     static int counter = 0;
@@ -12,10 +12,7 @@ public abstract class Shape
 
     public List<string> Data { get; set; }
 
-    public void NewNumber()
-    {
-        Number = ++counter;
-    }
+    public void NewNumber() => Number = ++counter;
 
     public override string ToString() => Number.ToString();
 }

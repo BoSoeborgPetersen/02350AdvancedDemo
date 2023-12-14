@@ -10,12 +10,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Using Include="_02350AdvancedDemo.Message" />
 		<Using Include="_02350AdvancedDemo.Model" />
 		<Using Include="_02350AdvancedDemo.UndoRedo" />
-		<Using Include="_02350AdvancedDemo.Serialization" />
 		<Using Include="_02350AdvancedDemo.ViewModel" />
 		<Using Include="CommunityToolkit.Mvvm.ComponentModel" />
 		<Using Include="CommunityToolkit.Mvvm.Input" />
+		<Using Include="CommunityToolkit.Mvvm.Messaging" />
+		<Using Include="CommunityToolkit.Mvvm.Messaging.Messages" />
 		<Using Include="Microsoft.Win32" />
 		<Using Include="System.Collections" />
 		<Using Include="System.Collections.ObjectModel" />
@@ -26,9 +28,8 @@
 		<Using Include="System.Windows.Media" />
 		<Using Include="System.Windows.Controls" />
 		<Using Include="System.Windows.Controls.Ribbon" />
-		<Using Include="System.Xml.Serialization" />
 	</ItemGroup>
-
+	
 	<ItemGroup>
 		<ApplicationDefinition Include="View\App.xaml" />
 	</ItemGroup>
