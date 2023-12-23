@@ -19,12 +19,12 @@ public partial class MainViewModel : BaseViewModel
     public MainViewModel() : base()
     {
         Shapes = [
-            new CircleViewModel(new Circle() { Position = new(30, 40), Size = new(80, 80), Data = ["text1", "text2", "text3"] }),
-            new SquareViewModel(new Square() { Position = new(140, 230), Size = new(200, 100), Data = ["text1", "text2", "text3"] })
+            new CircleViewModel() { Position = new(30, 40), Size = new(80, 80), Data = ["text1", "text2", "text3"] },
+            new SquareViewModel() { Position = new(140, 230), Size = new(200, 100), Data = ["text1", "text2", "text3"] }
         ];
 
         Lines = [
-            new LineViewModel(new Line() {  Label = "Line Text" }) { From = Shapes[0], To = Shapes[1] }
+            new LineViewModel() { From = Shapes[0], To = Shapes[1], Label = "Line Text" }
         ];
     }
 
@@ -42,7 +42,7 @@ public partial class MainViewModel : BaseViewModel
             if (!selectedShapes.Any()) selectedShapes = new List<ShapeViewModel>() { TargetShape(e) };
 
             foreach (var s in selectedShapes)
-                initialShapePositions.Add(s.Number, s.CanvasCenter);
+                initialShapePositions.Add(s.Number, s.Position);
 
             e.MouseDevice.Target.CaptureMouse();
         }
@@ -62,7 +62,7 @@ public partial class MainViewModel : BaseViewModel
             foreach (var s in selectedShapes)
             {
                 var originalPosition = initialShapePositions[s.Number];
-                s.CanvasCenter = (originalPosition + (mousePosition - initialMousePosition));
+                s.Position = (originalPosition + (mousePosition - initialMousePosition));
             }
 
             e.Handled = true;
@@ -79,16 +79,16 @@ public partial class MainViewModel : BaseViewModel
             if (addingLineFrom == null) { addingLineFrom = shape; addingLineFrom.IsSelected = true; }
             else if (addingLineFrom.Number != shape.Number)
             {
-                LineViewModel lineToAdd = new(
-                    addingLineType == typeof(Line) ? new Line() :
-                    new DashLine()
-                )
-                { From = addingLineFrom, To = shape };
-                undoRedoController.AddAndExecute(new AddLineCommand(Lines, lineToAdd));
-                addingLineFrom.IsSelected = false;
-                IsAddingLine = false;
-                addingLineType = null;
-                addingLineFrom = null;
+                //LineViewModel lineToAdd = new(
+                //    addingLineType == typeof(Line) ? new Line() :
+                //    new DashLine()
+                //)
+                //{ From = addingLineFrom, To = shape };
+                //undoRedoController.AddAndExecute(new AddLineCommand(Lines, lineToAdd));
+                //addingLineFrom.IsSelected = false;
+                //IsAddingLine = false;
+                //addingLineType = null;
+                //addingLineFrom = null;
             }
         }
         else
@@ -101,7 +101,7 @@ public partial class MainViewModel : BaseViewModel
             foreach (var s in selectedShapes)
             {
                 var originalPosition = initialShapePositions[s.Number];
-                s.CanvasCenter = originalPosition;
+                s.Position = originalPosition;
             }
             undoRedoController.AddAndExecute(new MoveShapesCommand(selectedShapes, mousePosition - initialMousePosition));
 

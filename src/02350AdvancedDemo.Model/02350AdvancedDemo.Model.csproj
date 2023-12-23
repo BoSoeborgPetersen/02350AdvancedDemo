@@ -2,17 +2,12 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0-windows</TargetFramework>
-		<UseWPF>true</UseWPF>
 		<ImplicitUsings>true</ImplicitUsings>
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Using Include="System.Drawing" />
 		<Using Include="System.Text.Json.Serialization" />
-		<Using Include="System.Windows" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 	</ItemGroup>
 
 </Project>

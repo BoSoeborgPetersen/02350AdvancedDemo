@@ -18,7 +18,7 @@
                 <RibbonButton ToolTip="New Diagram" SmallImageSource="/Images/New.png" Command="{Binding NewDiagramCommand}"/>
                 <RibbonButton ToolTip="Open Diagram" SmallImageSource="/Images/Open.png" Command="{Binding OpenDiagramCommand}"/>
                 <RibbonButton ToolTip="Save Diagram" SmallImageSource="/Images/Save.png" Command="{Binding SaveDiagramCommand}"/>
-                <RibbonSplitButton ToolTip="Undo" SmallImageSource="/Images/Undo.png" Command="{Binding UndoCommand}">
+                <RibbonSplitButton ToolTip="Undo" SmallImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="1">
                     <RibbonSplitMenuItem Header="Undo 2" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="2"/>
                     <RibbonSplitMenuItem Header="Undo 3" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="3"/>
                     <RibbonSplitMenuItem Header="Undo 4" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="4"/>

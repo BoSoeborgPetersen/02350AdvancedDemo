@@ -4,8 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewmodel="clr-namespace:_02350AdvancedDemo.ViewModel"
-             d:DataContext="{d:DesignInstance Type=viewmodel:CircleViewModel}"
+             xmlns:vm="clr-namespace:_02350AdvancedDemo.ViewModel"
+             d:DataContext="{d:DesignInstance Type=vm:CircleViewModel}"
              mc:Ignorable="d" 
              Canvas.Left="{Binding Position.X}" Canvas.Top="{Binding Position.Y}" Width="{Binding Size.Width}" Height="{Binding Size.Height}" 
              d:DesignHeight="100" d:DesignWidth="100">
