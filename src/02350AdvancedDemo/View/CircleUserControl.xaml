@@ -7,9 +7,8 @@
              xmlns:vm="clr-namespace:_02350AdvancedDemo.ViewModel"
              d:DataContext="{d:DesignInstance Type=vm:CircleViewModel}"
              mc:Ignorable="d" 
-             Canvas.Left="{Binding Position.X}" Canvas.Top="{Binding Position.Y}" Width="{Binding Size.Width}" Height="{Binding Size.Height}" 
              d:DesignHeight="100" d:DesignWidth="100">
-    <Grid>
+    <Grid Width="{Binding Size.Width}" Height="{Binding Size.Height}" >
         <Ellipse Fill="{Binding SelectedColor}" Stroke="Transparent" StrokeThickness="6" />
         <Grid>
             <Grid.RowDefinitions>
@@ -37,13 +36,13 @@
             </Ellipse.Triggers>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                    <i:InvokeCommandAction Command="{Binding DataContext.MouseDownShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                    <i:InvokeCommandAction Command="{Binding MouseDownCommand}" PassEventArgsToCommand="True" />
                 </i:EventTrigger>
                 <i:EventTrigger EventName="MouseMove">
-                    <i:InvokeCommandAction Command="{Binding DataContext.MouseMoveShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                    <i:InvokeCommandAction Command="{Binding MouseMoveCommand}" PassEventArgsToCommand="True" />
                 </i:EventTrigger>
                 <i:EventTrigger EventName="MouseLeftButtonUp">
-                    <i:InvokeCommandAction Command="{Binding DataContext.MouseUpShapeCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" PassEventArgsToCommand="True"/>
+                    <i:InvokeCommandAction Command="{Binding MouseUpCommand}" PassEventArgsToCommand="True" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <Ellipse.ContextMenu>

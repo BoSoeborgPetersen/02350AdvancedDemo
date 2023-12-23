@@ -2,6 +2,7 @@
 
 public partial class MainViewModel : BaseViewModel
 {
+    readonly MouseManipulationService mouseManipulationService = MouseManipulationService.Instance;
     Point initialMousePosition;
     readonly Dictionary<int, Point> initialShapePositions = [];
 
@@ -26,90 +27,6 @@ public partial class MainViewModel : BaseViewModel
         Lines = [
             new LineViewModel() { From = Shapes[0], To = Shapes[1], Label = "Line Text" }
         ];
-    }
-
-    [RelayCommand]
-    void MouseDownShape(MouseButtonEventArgs e)
-    {
-        if (!IsAddingLine)
-        {
-            var shape = TargetShape(e);
-            var mousePosition = RelativeMousePosition(e);
-
-            initialMousePosition = mousePosition;
-
-            var selectedShapes = Shapes.Where(x => x.IsMoveSelected);
-            if (!selectedShapes.Any()) selectedShapes = new List<ShapeViewModel>() { TargetShape(e) };
-
-            foreach (var s in selectedShapes)
-                initialShapePositions.Add(s.Number, s.Position);
-
-            e.MouseDevice.Target.CaptureMouse();
-        }
-        e.Handled = true;
-    }
-
-    [RelayCommand]
-    void MouseMoveShape(MouseEventArgs e)
-    {
-        if (Mouse.Captured != null && !IsAddingLine)
-        {
-            var mousePosition = RelativeMousePosition(e);
-
-            var selectedShapes = Shapes.Where(x => x.IsMoveSelected);
-            if (!selectedShapes.Any()) selectedShapes = new List<ShapeViewModel>() { TargetShape(e) };
-
-            foreach (var s in selectedShapes)
-            {
-                var originalPosition = initialShapePositions[s.Number];
-                s.Position = (originalPosition + (mousePosition - initialMousePosition));
-            }
-
-            e.Handled = true;
-        }
-    }
-
-    [RelayCommand]
-    void MouseUpShape(MouseButtonEventArgs e)
-    {
-        if (IsAddingLine)
-        {
-            var shape = TargetShape(e);
-
-            if (addingLineFrom == null) { addingLineFrom = shape; addingLineFrom.IsSelected = true; }
-            else if (addingLineFrom.Number != shape.Number)
-            {
-                //LineViewModel lineToAdd = new(
-                //    addingLineType == typeof(Line) ? new Line() :
-                //    new DashLine()
-                //)
-                //{ From = addingLineFrom, To = shape };
-                //undoRedoController.AddAndExecute(new AddLineCommand(Lines, lineToAdd));
-                //addingLineFrom.IsSelected = false;
-                //IsAddingLine = false;
-                //addingLineType = null;
-                //addingLineFrom = null;
-            }
-        }
-        else
-        {
-            var mousePosition = RelativeMousePosition(e);
-
-            var selectedShapes = Shapes.Where(x => x.IsMoveSelected).ToList();
-            if (!selectedShapes.Any()) selectedShapes = [TargetShape(e)];
-
-            foreach (var s in selectedShapes)
-            {
-                var originalPosition = initialShapePositions[s.Number];
-                s.Position = originalPosition;
-            }
-            undoRedoController.AddAndExecute(new MoveShapesCommand(selectedShapes, mousePosition - initialMousePosition));
-
-            initialMousePosition = new();
-            initialShapePositions.Clear();
-            e.MouseDevice.Target.ReleaseMouseCapture();
-        }
-        e.Handled = true;
     }
 
     [RelayCommand]

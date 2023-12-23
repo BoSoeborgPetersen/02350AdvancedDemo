@@ -46,8 +46,8 @@
                     <i:InvokeCommandAction Command="{Binding MouseUpCanvasCommand}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-            <ItemsControl ItemsSource="{Binding Lines}"/>
-            <ItemsControl ItemsSource="{Binding Shapes}"/>
+            <ItemsControl ItemsSource="{Binding Lines}" ItemsPanel="{StaticResource CanvasPanel}"/>
+            <ItemsControl ItemsSource="{Binding Shapes}" ItemsPanel="{StaticResource CanvasPanel}" ItemContainerStyle="{StaticResource CanvasPositionStyle}"/>
             <Canvas>
                 <Border Canvas.Left="{Binding SelectionBoxX}" Canvas.Top="{Binding SelectionBoxY}" Width="{Binding SelectionBoxWidth}" Height="{Binding SelectionBoxHeight}"
                         BorderBrush="Black" BorderThickness="2">

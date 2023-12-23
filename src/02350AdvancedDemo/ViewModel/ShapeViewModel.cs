@@ -1,6 +1,6 @@
 namespace _02350AdvancedDemo.ViewModel;
 
-public abstract partial class ShapeViewModel : BaseViewModel
+public abstract partial class ShapeViewModel : BaseViewModel, IRecipient<IsAddingLineMessage>
 {
     readonly MouseManipulationService mouseManipulationService = MouseManipulationService.Instance;
 
@@ -30,15 +30,18 @@ public abstract partial class ShapeViewModel : BaseViewModel
     public Vector Center => (Vector)Size / 2;
     public Point CanvasCenter => Position + Center;
     public Brush SelectedColor => IsSelected ? Brushes.Red : Brushes.Yellow;
-
     public Brush BackgroundColor => IsMoveSelected ? Brushes.SkyBlue : Brushes.Navy;
+    public double ModeOpacity => mouseManipulationService.IsAddingLine ? 0.4 : 1.0;
 
     [RelayCommand]
     void Remove() => undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, [this], Lines.Where(l => Number == l.From.Number || Number == l.To.Number).ToList()));
+
     [RelayCommand]
-    public void MouseDown(MouseButtonEventArgs e) => mouseManipulationService.MouseDown(this, e);
+    void MouseDown(MouseButtonEventArgs e) => mouseManipulationService.MouseDown(this, e);
     [RelayCommand]
-    public void MouseMove(MouseEventArgs e) => mouseManipulationService.MouseMove(this, e);
+    void MouseMove(MouseEventArgs e) => mouseManipulationService.MouseMove(this, e);
     [RelayCommand]
-    public void MouseUp(MouseButtonEventArgs e) => mouseManipulationService.MouseUp(this, e);
+    void MouseUp(MouseButtonEventArgs e) => mouseManipulationService.MouseUp(this, e);
+
+    public void Receive(IsAddingLineMessage message) => OnPropertyChanged(nameof(ModeOpacity));
 }

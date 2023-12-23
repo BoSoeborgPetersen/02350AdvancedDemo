@@ -16,27 +16,27 @@
                 <StackPanel>
                     <Button Content="Add Circle" Command="{Binding AddCircleCommand}"/>
                     <Button Content="Add Square" Command="{Binding AddSquareCommand}"/>
-                    <DataGrid x:Name="shapesControl" Height="140" ItemsSource="{Binding Shapes}" SelectedValue="{Binding SelectedShape}" HeadersVisibility="Column" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                    <DataGrid Height="140" ItemsSource="{Binding Shapes}" SelectedValue="{Binding SelectedShape}" HeadersVisibility="Column" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Number" Width="*" Binding="{Binding Number}" IsReadOnly="True"/>
                             <DataGridTextColumn Header="Position" Width="*" Binding="{Binding Position}"/>
                             <DataGridTextColumn Header="Size" Width="*" Binding="{Binding Size}"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Remove chosen shapes" Command="{Binding RemoveShapesCommand}" CommandParameter="{Binding SelectedItems, ElementName=shapesControl}"/>
+                    <Button Content="Remove chosen shapes" Command="{Binding RemoveShapeCommand}"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Lines">
                 <StackPanel>
                     <Button Content="Add line" Command="{Binding AddLineCommand}"/>
                     <Button Content="Add dash line" Command="{Binding AddDashLineCommand}"/>
-                    <DataGrid x:Name="linesControl" Height="140" ItemsSource="{Binding Lines}" SelectedValue="{Binding SelectedLine}" HeadersVisibility="Column" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
+                    <DataGrid Height="140" ItemsSource="{Binding Lines}" SelectedValue="{Binding SelectedLine}" HeadersVisibility="Column" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.Columns>
                             <DataGridComboBoxColumn Header="From" DisplayMemberPath="Number" Width="*" ItemsSource="{Binding Source={StaticResource Shapes}}" SelectedItemBinding="{Binding From, UpdateSourceTrigger=PropertyChanged}" />
                             <DataGridComboBoxColumn Header="To" DisplayMemberPath="Number" Width="*" ItemsSource="{Binding Source={StaticResource Shapes}}" SelectedItemBinding="{Binding To, UpdateSourceTrigger=PropertyChanged}" />
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Remove chosen lines" Command="{Binding RemoveLinesCommand}" CommandParameter="{Binding SelectedItems, ElementName=linesControl}"/>
+                    <Button Content="Remove chosen lines" Command="{Binding RemoveLineCommand}"/>
                 </StackPanel>
             </GroupBox>
         </StackPanel>

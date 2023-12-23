@@ -10,20 +10,21 @@
                 <ResourceDictionary Source="/Themes/ShinyBlue.xaml"/>
                 <ResourceDictionary>
                     <DataTemplate DataType="{x:Type ViewModel:CircleViewModel}">
-                        <Canvas>
-                            <View:CircleUserControl/>
-                        </Canvas>
+                        <View:CircleUserControl/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type ViewModel:SquareViewModel}">
-                        <Canvas>
-                            <View:SquareUserControl/>
-                        </Canvas>
+                        <View:SquareUserControl/>
                     </DataTemplate>
                     <DataTemplate DataType="{x:Type ViewModel:LineViewModel}">
-                        <Canvas>
-                            <View:LineUserControl/>
-                        </Canvas>
+                        <View:LineUserControl/>
                     </DataTemplate>
+                    <ItemsPanelTemplate x:Key="CanvasPanel">
+                        <Canvas/>
+                    </ItemsPanelTemplate>
+                    <Style TargetType="ContentPresenter" x:Key="CanvasPositionStyle">
+                        <Setter Property="Canvas.Left" Value="{Binding Position.X}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Position.Y}"/>
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
