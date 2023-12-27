@@ -1,20 +1,34 @@
 namespace _02350AdvancedDemo.ViewModel;
 
-public abstract partial class ShapeViewModel : BaseViewModel, IRecipient<IsAddingLineMessage>
+//public abstract partial class ShapeViewModel(StateService state, MouseService mouse, UndoRedoController undoRedo) : ObservableRecipient, IRecipient<IsAddingLineMessage>
+public abstract partial class ShapeViewModel : ObservableRecipient, IRecipient<IsAddingLineMessage> // TODO: Dependency Injection.
 {
-    readonly MouseManipulationService mouseManipulationService = MouseManipulationService.Instance;
+    //readonly StateService state = StateService.Instance;
+    //readonly UndoRedoController undoRedo = UndoRedoController.Instance;
+    //readonly MouseService mouse = MouseService.Instance;
+
+    StateService _state;
+    StateService state => _state ??= Ioc.Default.GetService<StateService>();
+    MouseService _mouse;
+    MouseService mouse => _mouse ??= Ioc.Default.GetService<MouseService>();
+    UndoRedoController _undoRedo;
+    UndoRedoController undoRedo => _undoRedo ??= Ioc.Default.GetService<UndoRedoController>();
+
+    protected ShapeViewModel() => IsActive = true;
+
+    static int counter = 0;
 
     [ObservableProperty]
-    int number;
+    int number = ++counter;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanvasCenter))]
-    Point position;
+    Point position = new(200 + (counter * 10), 200 + (counter * 10)); // TODO: Change to System.Drawing.Point
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Center))]
     [NotifyPropertyChangedFor(nameof(CanvasCenter))]
-    Size size;
+    Size size = new(100, 100); // TODO: Change to System.Drawing.Size
 
     [ObservableProperty]
     List<string> data;
@@ -31,17 +45,17 @@ public abstract partial class ShapeViewModel : BaseViewModel, IRecipient<IsAddin
     public Point CanvasCenter => Position + Center;
     public Brush SelectedColor => IsSelected ? Brushes.Red : Brushes.Yellow;
     public Brush BackgroundColor => IsMoveSelected ? Brushes.SkyBlue : Brushes.Navy;
-    public double ModeOpacity => mouseManipulationService.IsAddingLine ? 0.4 : 1.0;
-
-    [RelayCommand]
-    void Remove() => undoRedoController.AddAndExecute(new RemoveShapesCommand(Shapes, Lines, [this], Lines.Where(l => Number == l.From.Number || Number == l.To.Number).ToList()));
-
-    [RelayCommand]
-    void MouseDown(MouseButtonEventArgs e) => mouseManipulationService.MouseDown(this, e);
-    [RelayCommand]
-    void MouseMove(MouseEventArgs e) => mouseManipulationService.MouseMove(this, e);
-    [RelayCommand]
-    void MouseUp(MouseButtonEventArgs e) => mouseManipulationService.MouseUp(this, e);
+    public double ModeOpacity => state?.IsAddingLine == true ? 0.4 : 1.0;
 
     public void Receive(IsAddingLineMessage message) => OnPropertyChanged(nameof(ModeOpacity));
+
+    [RelayCommand]
+    void Remove() => undoRedo.AddAndExecute(new RemoveShapesCommand(state.Shapes, state.Lines, [this], state.Lines.Where(l => Number == l.From.Number || Number == l.To.Number).ToList()));
+
+    [RelayCommand]
+    void MouseDown(MouseButtonEventArgs e) => mouse.ShapeMouseDown(this, e);
+    [RelayCommand]
+    void MouseMove(MouseEventArgs e) => mouse.ShapeMouseMove(this, e);
+    [RelayCommand]
+    void MouseUp(MouseButtonEventArgs e) => mouse.ShapeMouseUp(this, e);
 }

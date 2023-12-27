@@ -9,8 +9,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100">
     <Grid Width="{Binding Size.Width}" Height="{Binding Size.Height}" >
-        <Ellipse Fill="{Binding SelectedColor}" Stroke="Transparent" StrokeThickness="6" />
-        <Grid>
+        <Ellipse Fill="{Binding SelectedColor}" Stroke="Transparent" StrokeThickness="6">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonDown">
+                    <i:InvokeCommandAction Command="{Binding MouseDownCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseMove">
+                    <i:InvokeCommandAction Command="{Binding MouseMoveCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="MouseLeftButtonUp">
+                    <i:InvokeCommandAction Command="{Binding MouseUpCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Ellipse>
+        <Grid IsHitTestVisible="False">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="auto"/>
@@ -21,7 +33,7 @@
             <TextBlock Grid.Row="1" Text="Choose" TextAlignment="Center" FontWeight="Bold"/>
             <TextBlock Grid.Row="3" Text="by clicking" TextAlignment="Center" FontWeight="Bold"/>
         </Grid>
-        <Ellipse Opacity="{Binding DataContext.ModeOpacity, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}" Stroke="Purple" StrokeThickness="6" StrokeDashArray="3.3" Fill="{Binding BackgroundColor}">
+        <Ellipse Opacity="{Binding ModeOpacity}" Stroke="Purple" StrokeThickness="6" StrokeDashArray="3.3" Fill="{Binding BackgroundColor}" IsHitTestVisible="False">
             <Ellipse.RenderTransform>
                 <RotateTransform CenterX="{Binding Center.X}" CenterY="{Binding Center.Y}"/>
             </Ellipse.RenderTransform>
@@ -34,17 +46,6 @@
                     </BeginStoryboard>
                 </EventTrigger>
             </Ellipse.Triggers>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseLeftButtonDown">
-                    <i:InvokeCommandAction Command="{Binding MouseDownCommand}" PassEventArgsToCommand="True" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="MouseMove">
-                    <i:InvokeCommandAction Command="{Binding MouseMoveCommand}" PassEventArgsToCommand="True" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="MouseLeftButtonUp">
-                    <i:InvokeCommandAction Command="{Binding MouseUpCommand}" PassEventArgsToCommand="True" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
             <Ellipse.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Remove" Command="{Binding RemoveCommand}"/>

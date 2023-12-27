@@ -8,20 +8,25 @@
 		<ImplicitUsings>true</ImplicitUsings>
 		<ApplicationIcon>Icon.ico</ApplicationIcon>
 	</PropertyGroup>
-
+	
 	<ItemGroup>
+		<Using Include="_02350AdvancedDemo.Data" />
 		<Using Include="_02350AdvancedDemo.Message" />
 		<Using Include="_02350AdvancedDemo.Model" />
 		<Using Include="_02350AdvancedDemo.Service" />
 		<Using Include="_02350AdvancedDemo.UndoRedo" />
 		<Using Include="_02350AdvancedDemo.ViewModel" />
+		<Using Include="AutoMapper" />
 		<Using Include="CommunityToolkit.Mvvm.ComponentModel" />
+		<Using Include="CommunityToolkit.Mvvm.DependencyInjection" />
 		<Using Include="CommunityToolkit.Mvvm.Input" />
 		<Using Include="CommunityToolkit.Mvvm.Messaging" />
 		<Using Include="CommunityToolkit.Mvvm.Messaging.Messages" />
+		<Using Include="Microsoft.Extensions.DependencyInjection" />
 		<Using Include="Microsoft.Win32" />
 		<Using Include="System.Collections" />
 		<Using Include="System.Collections.ObjectModel" />
+		<Using Include="System.Drawing.Rectangle" Alias="Rectangle" />
 		<Using Include="System.IO" />
 		<Using Include="System.Text" />
 		<Using Include="System.Text.Json" />
@@ -37,6 +42,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 	</ItemGroup>

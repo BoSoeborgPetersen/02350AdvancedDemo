@@ -4,25 +4,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewmodel="clr-namespace:_02350AdvancedDemo.ViewModel"
-             d:DataContext="{d:DesignInstance Type=viewmodel:SquareViewModel}"
+             xmlns:vm="clr-namespace:_02350AdvancedDemo.ViewModel"
+             d:DataContext="{d:DesignInstance Type=vm:SquareViewModel}"
              mc:Ignorable="d" 
-             Canvas.Left="{Binding Position.X}" Canvas.Top="{Binding Position.Y}" Width="{Binding Size.Width}" Height="{Binding Size.Height}" 
              d:DesignHeight="100" d:DesignWidth="100">
-    <Grid>
-        <Rectangle Fill="{Binding SelectedColor}" Stroke="Transparent" StrokeThickness="6" />
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition/>
-                <RowDefinition Height="auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="1" Text="Choose" TextAlignment="Center" FontWeight="Bold"/>
-            <TextBlock Grid.Row="3" Text="by clicking" TextAlignment="Center" FontWeight="Bold"/>
-        </Grid>
-        <Rectangle Opacity="{Binding ModeOpacity}" Stroke="Purple" StrokeThickness="6" StrokeDashArray="3" Fill="{Binding BackgroundColor}">
+    <Grid Width="{Binding Size.Width}" Height="{Binding Size.Height}" >
+        <Rectangle Fill="{Binding SelectedColor}" Stroke="Transparent" StrokeThickness="6">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeftButtonDown">
                     <i:InvokeCommandAction Command="{Binding MouseDownCommand}" PassEventArgsToCommand="True" />
@@ -35,7 +22,19 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </Rectangle>
-        <ListBox ItemsSource="{Binding Data}" Margin="10, 30, 10, 10" Opacity="{Binding DataContext.ModeOpacity, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+        <Grid IsHitTestVisible="False">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="1" Text="Choose" TextAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Grid.Row="3" Text="by clicking" TextAlignment="Center" FontWeight="Bold"/>
+        </Grid>
+        <Rectangle Opacity="{Binding ModeOpacity}" Stroke="Purple" StrokeThickness="6" StrokeDashArray="3" Fill="{Binding BackgroundColor}" IsHitTestVisible="False"/>
+        <ListBox ItemsSource="{Binding Data}" Margin="10, 30, 10, 10" Opacity="{Binding ModeOpacity}">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

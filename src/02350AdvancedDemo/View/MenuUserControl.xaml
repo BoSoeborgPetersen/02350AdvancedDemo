@@ -3,92 +3,91 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:viewmodel="clr-namespace:_02350AdvancedDemo.ViewModel"
-             d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
+             xmlns:vm="clr-namespace:_02350AdvancedDemo.ViewModel"
+             d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="140" d:DesignWidth="800">
     <Ribbon>
-        <!-- Help Pane, located at the right-hand side -->
-        <Ribbon.HelpPaneContent>
-            <RibbonButton SmallImageSource="/Images/Help.png" />
-        </Ribbon.HelpPaneContent>
         <!-- Quick Access Toolbar - located at the upper-left corner -->
         <Ribbon.QuickAccessToolBar>
             <RibbonQuickAccessToolBar>
-                <RibbonButton ToolTip="New Diagram" SmallImageSource="/Images/New.png" Command="{Binding NewDiagramCommand}"/>
-                <RibbonButton ToolTip="Open Diagram" SmallImageSource="/Images/Open.png" Command="{Binding OpenDiagramCommand}"/>
-                <RibbonButton ToolTip="Save Diagram" SmallImageSource="/Images/Save.png" Command="{Binding SaveDiagramCommand}"/>
-                <RibbonSplitButton ToolTip="Undo" SmallImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="1">
-                    <RibbonSplitMenuItem Header="Undo 2" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="2"/>
-                    <RibbonSplitMenuItem Header="Undo 3" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="3"/>
-                    <RibbonSplitMenuItem Header="Undo 4" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="4"/>
-                    <RibbonSplitMenuItem Header="Undo 5" ImageSource="/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="5"/>
+                <RibbonButton ToolTip="New Diagram" SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/New.png" Command="{Binding NewCommand}"/>
+                <RibbonButton ToolTip="Open Diagram" SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Open.png" Command="{Binding LoadCommand}"/>
+                <RibbonButton ToolTip="Save Diagram" SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Save.png" Command="{Binding SaveCommand}"/>
+                <RibbonSplitButton ToolTip="Undo" SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="1">
+                    <RibbonSplitMenuItem Header="Undo 2" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="2"/>
+                    <RibbonSplitMenuItem Header="Undo 3" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="3"/>
+                    <RibbonSplitMenuItem Header="Undo 4" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="4"/>
+                    <RibbonSplitMenuItem Header="Undo 5" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Command="{Binding UndoCommand}" CommandParameter="5"/>
                 </RibbonSplitButton>
-                <RibbonSplitButton ToolTip="Redo" SmallImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="1">
-                    <RibbonSplitMenuItem Header="Redo 2" ImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="2"/>
-                    <RibbonSplitMenuItem Header="Redo 3" ImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="3"/>
-                    <RibbonSplitMenuItem Header="Redo 4" ImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="4"/>
-                    <RibbonSplitMenuItem Header="Redo 5" ImageSource="/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="5"/>
+                <RibbonSplitButton ToolTip="Redo" SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="1">
+                    <RibbonSplitMenuItem Header="Redo 2" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="2"/>
+                    <RibbonSplitMenuItem Header="Redo 3" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="3"/>
+                    <RibbonSplitMenuItem Header="Redo 4" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="4"/>
+                    <RibbonSplitMenuItem Header="Redo 5" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Command="{Binding RedoCommand}" CommandParameter="5"/>
                 </RibbonSplitButton>
-                <RibbonButton ToolTip="Cut" SmallImageSource="/Images/Cut.png" Command="{Binding CutCommand}"/>
-                <RibbonButton ToolTip="Copy" SmallImageSource="/Images/Copy.png" Command="{Binding CopyCommand}"/>
-                <RibbonSplitButton ToolTip="Paste" SmallImageSource="/Images/Paste.png" Command="{Binding PasteCommand}">
-                    <RibbonSplitMenuItem Header="Only Shapes" ImageSource="/Images/Paste.png" Command="{Binding PasteCommand}"/>
-                    <RibbonSplitMenuItem Header="Something?" ImageSource="/Images/Paste.png" Command="{Binding PasteCommand}"/>
+                <RibbonButton ToolTip="Cut" SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Cut.png" Command="{Binding CutCommand}"/>
+                <RibbonButton ToolTip="Copy" SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Copy.png" Command="{Binding CopyCommand}"/>
+                <RibbonSplitButton ToolTip="Paste" SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Paste.png" Command="{Binding PasteCommand}">
+                    <RibbonSplitMenuItem Header="Only Shapes" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Paste.png" Command="{Binding PasteCommand}"/>
+                    <RibbonSplitMenuItem Header="Something?" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Paste.png" Command="{Binding PasteCommand}"/>
                 </RibbonSplitButton>
             </RibbonQuickAccessToolBar>
         </Ribbon.QuickAccessToolBar>
+        <!-- Help Pane, located at the right-hand side -->
+        <Ribbon.HelpPaneContent>
+            <RibbonButton SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Help.png" />
+        </Ribbon.HelpPaneContent>
         <!-- Application Menu, located at the left-hand side (down arrow) -->
         <Ribbon.ApplicationMenu>
-            <RibbonApplicationMenu KeyTip="F" SmallImageSource="/Images/Settings.png">
-                <RibbonApplicationMenuItem Header="New" ImageSource="/Images/New.png" Command="{Binding NewDiagramCommand}"/>
-                <RibbonApplicationMenuItem Header="Open" ImageSource="/Images/Open.png" Command="{Binding OpenDiagramCommand}"/>
-                <RibbonApplicationMenuItem Header="Save" ImageSource="/Images/Save.png" Command="{Binding SaveDiagramCommand}"/>
+            <RibbonApplicationMenu KeyTip="F" SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Settings.png">
+                <RibbonApplicationMenuItem Header="New" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/New.png" Command="{Binding NewCommand}"/>
+                <RibbonApplicationMenuItem Header="Open" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Open.png" Command="{Binding LoadCommand}"/>
+                <RibbonApplicationMenuItem Header="Save" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Save.png" Command="{Binding SaveCommand}"/>
                 <RibbonSeparator/>
-                <RibbonApplicationMenuItem Header="Options" ImageSource="/Images/Options.png" />
+                <RibbonApplicationMenuItem Header="Options" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Options.png" />
                 <RibbonSeparator/>
-                <RibbonApplicationMenuItem Header="Exit" ImageSource="/Images/Exit.png" Command="{Binding ExitCommand}" />
+                <RibbonApplicationMenuItem Header="Exit" ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Exit.png" Command="{Binding ExitCommand}" />
             </RibbonApplicationMenu>
         </Ribbon.ApplicationMenu>
         <!-- Ribbon Tab #1: Home -->
         <RibbonTab Header="Home" KeyTip="H" >
             <!-- Load/Save group-->
             <RibbonGroup Header="Load/Save">
-                <RibbonButton SmallImageSource="/Images/New.png" Label="New" KeyTip="N" Command="{Binding NewDiagramCommand}"/>
-                <RibbonButton SmallImageSource="/Images/Open.png" Label="Open" KeyTip="O" Command="{Binding OpenDiagramCommand}"/>
-                <RibbonButton SmallImageSource="/Images/Save.png" Label="Save" KeyTip="S" Command="{Binding SaveDiagramCommand}"/>
+                <RibbonButton SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/New.png" Label="New" KeyTip="N" Command="{Binding NewCommand}"/>
+                <RibbonButton SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Open.png" Label="Open" KeyTip="O" Command="{Binding LoadCommand}"/>
+                <RibbonButton SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Save.png" Label="Save" KeyTip="S" Command="{Binding SaveCommand}"/>
             </RibbonGroup>
             <!-- Undo/Redo group-->
             <RibbonGroup Header="Undo/Redo">
-                <RibbonMenuButton LargeImageSource="/Images/Undo.png" Label="Undo" KeyTip="Z">
-                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 1" Command="{Binding UndoCommand}" CommandParameter="1"/>
-                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 2" Command="{Binding UndoCommand}" CommandParameter="2"/>
-                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 3" Command="{Binding UndoCommand}" CommandParameter="3"/>
-                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 4" Command="{Binding UndoCommand}" CommandParameter="4"/>
-                    <RibbonMenuItem ImageSource="/Images/Undo.png" Header="Undo 5" Command="{Binding UndoCommand}" CommandParameter="5"/>
+                <RibbonMenuButton LargeImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Label="Undo" KeyTip="Z">
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Header="Undo 1" Command="{Binding UndoCommand}" CommandParameter="1"/>
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Header="Undo 2" Command="{Binding UndoCommand}" CommandParameter="2"/>
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Header="Undo 3" Command="{Binding UndoCommand}" CommandParameter="3"/>
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Header="Undo 4" Command="{Binding UndoCommand}" CommandParameter="4"/>
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Undo.png" Header="Undo 5" Command="{Binding UndoCommand}" CommandParameter="5"/>
                 </RibbonMenuButton>
-                <RibbonMenuButton LargeImageSource="/Images/Redo.png" Label="Redo" KeyTip="Y">
-                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 1" Command="{Binding RedoCommand}" CommandParameter="1"/>
-                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 2" Command="{Binding RedoCommand}" CommandParameter="2"/>
-                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 3" Command="{Binding RedoCommand}" CommandParameter="3"/>
-                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 4" Command="{Binding RedoCommand}" CommandParameter="4"/>
-                    <RibbonMenuItem ImageSource="/Images/Redo.png" Header="Redo 5" Command="{Binding RedoCommand}" CommandParameter="5"/>
+                <RibbonMenuButton LargeImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Label="Redo" KeyTip="Y">
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Header="Redo 1" Command="{Binding RedoCommand}" CommandParameter="1"/>
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Header="Redo 2" Command="{Binding RedoCommand}" CommandParameter="2"/>
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Header="Redo 3" Command="{Binding RedoCommand}" CommandParameter="3"/>
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Header="Redo 4" Command="{Binding RedoCommand}" CommandParameter="4"/>
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Redo.png" Header="Redo 5" Command="{Binding RedoCommand}" CommandParameter="5"/>
                 </RibbonMenuButton>
             </RibbonGroup>
             <!-- Copy/Paste group-->
             <RibbonGroup Header="Copy/Paste">
-                <RibbonButton SmallImageSource="/Images/Cut.png" Label="Cut" KeyTip="X" Command="{Binding CutCommand}" />
-                <RibbonButton SmallImageSource="/Images/Copy.png" Label="Copy" KeyTip="C" Command="{Binding CopyCommand}"/>
-                <RibbonMenuButton SmallImageSource="/Images/Paste.png" Label="Paste" KeyTip="V">
-                    <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Paste" Command="{Binding PasteCommand}"/>
-                    <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Only Shapes" Command="{Binding PasteCommand}"/>
-                    <RibbonMenuItem ImageSource="/Images/Paste.png" Header="Something?" Command="{Binding PasteCommand}"/>
+                <RibbonButton SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Cut.png" Label="Cut" KeyTip="X" Command="{Binding CutCommand}" />
+                <RibbonButton SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Copy.png" Label="Copy" KeyTip="C" Command="{Binding CopyCommand}"/>
+                <RibbonMenuButton SmallImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Paste.png" Label="Paste" KeyTip="V">
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Paste.png" Header="Paste" Command="{Binding PasteCommand}"/>
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Paste.png" Header="Only Shapes" Command="{Binding PasteCommand}"/>
+                    <RibbonMenuItem ImageSource="pack://application:,,,/02350AdvancedDemo;component/Images/Paste.png" Header="Something?" Command="{Binding PasteCommand}"/>
                 </RibbonMenuButton>
             </RibbonGroup>
         </RibbonTab>
         <!-- Ribbon Tab #2: -->
-        <RibbonTab Header="UML" KeyTip="U">
-        </RibbonTab>
+        <RibbonTab Header="UML" KeyTip="U"/>
         <!-- Ribbon Tab #3: -->
         <RibbonTab Header="Something?" />
     </Ribbon>

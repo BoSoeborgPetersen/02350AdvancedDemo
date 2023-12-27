@@ -1,6 +1,6 @@
 ﻿namespace _02350AdvancedDemo.ViewModel;
 
-public partial class LineViewModel() : BaseViewModel()
+public partial class LineViewModel : ObservableObject
 {
     [ObservableProperty]
     ShapeViewModel from;

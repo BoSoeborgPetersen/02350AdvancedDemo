@@ -1,6 +1,6 @@
 ﻿namespace _02350AdvancedDemo.Service;
 
-public class MappingService
+public class MappingService() // TODO: Switch to AutoMapper
 {
     public static Diagram Map(IList<ShapeViewModel> shapes, IList<LineViewModel> lines) => new()
     {
@@ -18,8 +18,8 @@ public class MappingService
             new SquareViewModel() { Number = s.Number, Position = new(s.X, s.Y), Size = new(s.Width, s.Height), Data = s.Data } :
             new CircleViewModel() { Number = s.Number, Position = new(s.X, s.Y), Size = new(s.Width, s.Height), Data = s.Data }).ToList();
         var lines = diagram.Lines.Select(l => l is DashLine ?
-            new DashLineViewModel() { From = shapes.Single(s => s.Number == l.FromNumber) } :
-            new LineViewModel() { From = shapes.Single(s => s.Number == l.FromNumber) }).ToList();
+            new DashLineViewModel() { From = shapes.Single(s => s.Number == l.FromNumber), To = shapes.Single(s => s.Number == l.ToNumber) } :
+            new LineViewModel() { From = shapes.Single(s => s.Number == l.FromNumber), To = shapes.Single(s => s.Number == l.ToNumber) }).ToList();
         return (shapes, lines);
     }
 }

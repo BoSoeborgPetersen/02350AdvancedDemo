@@ -1,13 +1,7 @@
 ﻿namespace _02350AdvancedDemo.Service;
 
-public class CopyPasteService
+public class ClipboardService(UndoRedoController undoRedo)
 {
-    readonly UndoRedoController undoRedoController = UndoRedoController.Instance;
-
-    public static CopyPasteService Instance { get; } = new();
-
-    CopyPasteService() { }
-
     public void Cut(ObservableCollection<ShapeViewModel> shapes, ObservableCollection<LineViewModel> lines)
     {
         Copy(shapes, lines);
@@ -15,7 +9,7 @@ public class CopyPasteService
         var selectedShapes = shapes.Where(x => x.IsMoveSelected).ToList();
         var selectedLines = lines.Where(x => x.From.IsMoveSelected || x.To.IsMoveSelected).ToList();
 
-        undoRedoController.AddAndExecute(new RemoveShapesCommand(shapes, lines, selectedShapes, lines.Where(l => selectedShapes.Any(s => s.Number == l.From.Number || s.Number == l.To.Number)).ToList()));
+        undoRedo.AddAndExecute(new RemoveShapesCommand(shapes, lines, selectedShapes, lines.Where(l => selectedShapes.Any(s => s.Number == l.From.Number || s.Number == l.To.Number)).ToList()));
     }
 
     public void Copy(ObservableCollection<ShapeViewModel> shapes, ObservableCollection<LineViewModel> lines)
@@ -28,23 +22,29 @@ public class CopyPasteService
         Clipboard.SetText(JsonSerializer.Serialize(diagram));
     }
 
-    public async Task Paste(ObservableCollection<ShapeViewModel> shapes, ObservableCollection<LineViewModel> lines)
+    public void Paste(ObservableCollection<ShapeViewModel> Shapes, ObservableCollection<LineViewModel> Lines) // TODO: Reconstruct with new shape numbers. // TODO: Nudge shapes by changing positions.
     {
-        //var diagram = Deserialize(Clipboard.GetText());
+        // Unselect existing shapes.
+        foreach (var s in Shapes)
+            s.IsMoveSelected = false;
+
+        var diagram = JsonSerializer.Deserialize<Diagram>(Clipboard.GetText());
+        var (loadedShapes, loadedLines) = MappingService.Unmap(diagram);
+
+        foreach (var shape in loadedShapes) Shapes.Add(shape);
+        foreach (var line in loadedLines) Lines.Add(line);
 
         //var shapes = diagram.Shapes;
         //var lines = diagram.Lines;
-
-        //// Unselect existing shapes.
-        //foreach (var s in Shapes)
-        //    s.IsMoveSelected = false;
 
         //// Change numbers for shapes if necessary and move them a little.
         //foreach (var s in shapes)
         //    if (Shapes.Any(x => x.Number == s.Number))
         //    {
         //        var oldNumber = s.Number;
-        //        s.Position += new Vector(50, 50);
+        //        s.Number == ShapeViewModel.
+        //        s.X += 50;
+        //        s.Y += 50;
 
         //        // change referenced number for lines.
         //        foreach (var l in lines.Where(x => x.FromNumber == oldNumber))

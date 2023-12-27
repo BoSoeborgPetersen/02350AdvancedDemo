@@ -1,26 +1,27 @@
 ﻿<RibbonWindow x:Class="_02350AdvancedDemo.View.MainWindow"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
               xmlns:v="clr-namespace:_02350AdvancedDemo.View"
               xmlns:vm="clr-namespace:_02350AdvancedDemo.ViewModel"
+              d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
+              mc:Ignorable="d" 
               Title="02350 Advanced Demo" Height="600" Width="800" Icon="/Icon.ico">
-    <Window.DataContext>
-        <vm:MainViewModel />
-    </Window.DataContext>
     <Window.InputBindings>
-        <KeyBinding Command="{Binding NewDiagramCommand}" Gesture="CTRL+N"/>
-        <KeyBinding Command="{Binding OpenDiagramCommand}" Gesture="CTRL+O"/>
-        <KeyBinding Command="{Binding SaveDiagramCommand}" Gesture="CTRL+S"/>
         <KeyBinding Command="{Binding UndoCommand}" Gesture="CTRL+Z"/>
         <KeyBinding Command="{Binding RedoCommand}" Gesture="CTRL+Y"/>
+        <KeyBinding Command="{Binding NewCommand}" Gesture="CTRL+N"/>
+        <KeyBinding Command="{Binding LoadCommand}" Gesture="CTRL+O"/>
+        <KeyBinding Command="{Binding SaveCommand}" Gesture="CTRL+S"/>
         <KeyBinding Command="{Binding CutCommand}" Gesture="CTRL+X"/>
         <KeyBinding Command="{Binding CopyCommand}" Gesture="CTRL+C"/>
         <KeyBinding Command="{Binding PasteCommand}" Gesture="CTRL+V"/>
     </Window.InputBindings>
     <DockPanel>
         <v:MenuUserControl DockPanel.Dock="Top"/>
-        <v:SidePanelUserControl/>
+        <v:SidePanelUserControl DataContext="{Binding SidePanelVM}"/>
         <StackPanel DockPanel.Dock="Bottom">
             <Slider x:Name="zoomSlider" ToolTip="Zoom" Value="1" Minimum="0.1" Maximum="10"/>
         </StackPanel>
@@ -37,19 +38,19 @@
             </Grid.LayoutTransform>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                    <i:InvokeCommandAction Command="{Binding MouseDownCanvasCommand}" PassEventArgsToCommand="True"/>
+                    <i:InvokeCommandAction Command="{Binding MouseDownCommand}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
                 <i:EventTrigger EventName="MouseMove">
-                    <i:InvokeCommandAction Command="{Binding MouseMoveCanvasCommand}" PassEventArgsToCommand="True"/>
+                    <i:InvokeCommandAction Command="{Binding MouseMoveCommand}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
                 <i:EventTrigger EventName="MouseLeftButtonUp">
-                    <i:InvokeCommandAction Command="{Binding MouseUpCanvasCommand}" PassEventArgsToCommand="True"/>
+                    <i:InvokeCommandAction Command="{Binding MouseUpCommand}" PassEventArgsToCommand="True"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ItemsControl ItemsSource="{Binding Lines}" ItemsPanel="{StaticResource CanvasPanel}"/>
             <ItemsControl ItemsSource="{Binding Shapes}" ItemsPanel="{StaticResource CanvasPanel}" ItemContainerStyle="{StaticResource CanvasPositionStyle}"/>
             <Canvas>
-                <Border Canvas.Left="{Binding SelectionBoxX}" Canvas.Top="{Binding SelectionBoxY}" Width="{Binding SelectionBoxWidth}" Height="{Binding SelectionBoxHeight}"
+                <Border Canvas.Left="{Binding SelectionBox.X}" Canvas.Top="{Binding SelectionBox.Y}" Width="{Binding SelectionBox.Width}" Height="{Binding SelectionBox.Height}"
                         BorderBrush="Black" BorderThickness="2">
                     <Rectangle Fill="Blue" Opacity=".2"/>
                 </Border>

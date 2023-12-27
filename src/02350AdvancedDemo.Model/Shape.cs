@@ -2,7 +2,7 @@
 
 [JsonDerivedType(typeof(Circle), nameof(Circle))]
 [JsonDerivedType(typeof(Square), nameof(Square))]
-public abstract class Shape
+public abstract class Shape // TODO: Try to change to records.
 {
     static int counter = 0;
 

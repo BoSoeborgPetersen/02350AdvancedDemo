@@ -1,91 +1,46 @@
-﻿namespace _02350AdvancedDemo.ViewModel;
+﻿
+namespace _02350AdvancedDemo.ViewModel;
 
-public partial class MainViewModel : BaseViewModel
+public partial class MainViewModel(ClipboardService clipboard, StateService state, SelectionBoxService selectionBoxService, UndoRedoController undoRedo, SidePanelViewModel sidePanelVM) : ObservableRecipient, IRecipient<UndoRedoChangedMessage>
 {
-    readonly MouseManipulationService mouseManipulationService = MouseManipulationService.Instance;
-    Point initialMousePosition;
-    readonly Dictionary<int, Point> initialShapePositions = [];
+    public SidePanelViewModel SidePanelVM { get; set; } = sidePanelVM;
 
-    Point SelectionBoxStart;
+    public ObservableCollection<ShapeViewModel> Shapes => state.Shapes;
+    public ObservableCollection<LineViewModel> Lines => state.Lines;
 
-    [ObservableProperty]
-    double selectionBoxX;
-    [ObservableProperty]
-    double selectionBoxY;
-    [ObservableProperty]
-    double selectionBoxWidth;
-    [ObservableProperty]
-    double selectionBoxHeight;
+    [RelayCommand(CanExecute = nameof(CanUndo))]
+    void Undo(string s) => undoRedo.Undo(s.ParseOr(1));
+    bool CanUndo(string s) => undoRedo.CanUndo(s.ParseOr(1));
 
-    public MainViewModel() : base()
-    {
-        Shapes = [
-            new CircleViewModel() { Position = new(30, 40), Size = new(80, 80), Data = ["text1", "text2", "text3"] },
-            new SquareViewModel() { Position = new(140, 230), Size = new(200, 100), Data = ["text1", "text2", "text3"] }
-        ];
+    [RelayCommand(CanExecute = nameof(CanRedo))]
+    void Redo(string s) => undoRedo.Redo(s.ParseOr(1));
+    bool CanRedo(string s) => undoRedo.CanRedo(s.ParseOr(1));
 
-        Lines = [
-            new LineViewModel() { From = Shapes[0], To = Shapes[1], Label = "Line Text" }
-        ];
-    }
+    public void Receive(UndoRedoChangedMessage message) { UndoCommand.NotifyCanExecuteChanged(); RedoCommand.NotifyCanExecuteChanged(); }
 
     [RelayCommand]
-    void MouseDownCanvas(MouseButtonEventArgs e)
+    void New()
     {
-        if (!IsAddingLine)
-        {
-            SelectionBoxStart = Mouse.GetPosition(e.MouseDevice.Target);
-            e.MouseDevice.Target.CaptureMouse();
-        }
+        if (Dialogs.ShowNew()) { Shapes.Clear(); Lines.Clear(); }
     }
 
-    [RelayCommand]
-    void MouseMoveCanvas(MouseEventArgs e)
-    {
-        if (Mouse.Captured != null && !IsAddingLine)
-        {
-            var SelectionBoxNow = Mouse.GetPosition(e.MouseDevice.Target);
-            SelectionBoxX = Math.Min(SelectionBoxStart.X, SelectionBoxNow.X);
-            SelectionBoxY = Math.Min(SelectionBoxStart.Y, SelectionBoxNow.Y);
-            SelectionBoxWidth = Math.Abs(SelectionBoxNow.X - SelectionBoxStart.X);
-            SelectionBoxHeight = Math.Abs(SelectionBoxNow.Y - SelectionBoxStart.Y);
-        }
-    }
+    [RelayCommand] void Load() => FileService.Load(Shapes, Lines);
+    [RelayCommand] void Save() => FileService.Save(Shapes, Lines);
+    [RelayCommand] void Cut() => clipboard.Cut(Shapes, Lines);
+    [RelayCommand] void Copy() => clipboard.Copy(Shapes, Lines);
+    [RelayCommand] void Paste() => clipboard.Paste(Shapes, Lines);
+    [RelayCommand] void Exit() => Application.Current.Shutdown();
 
-    [RelayCommand]
-    void MouseUpCanvas(MouseButtonEventArgs e)
-    {
-        if (!IsAddingLine)
-        {
-            var SelectionBoxEnd = Mouse.GetPosition(e.MouseDevice.Target);
-            var smallX = Math.Min(SelectionBoxStart.X, SelectionBoxEnd.X);
-            var smallY = Math.Min(SelectionBoxStart.Y, SelectionBoxEnd.Y);
-            var largeX = Math.Max(SelectionBoxStart.X, SelectionBoxEnd.X);
-            var largeY = Math.Max(SelectionBoxStart.Y, SelectionBoxEnd.Y);
-            foreach (var s in Shapes)
-                s.IsMoveSelected = s.CanvasCenter.X > smallX && s.CanvasCenter.X < largeX && s.CanvasCenter.Y > smallY && s.CanvasCenter.Y < largeY;
+    [ObservableProperty]
+    Rect selectionBox;
 
-            SelectionBoxX = SelectionBoxY = SelectionBoxWidth = SelectionBoxHeight = 0;
-            e.MouseDevice.Target.ReleaseMouseCapture();
-        }
-    }
+    [RelayCommand] void MouseDown(MouseButtonEventArgs e) => selectionBoxService.CanvasMouseDown(e);
+    [RelayCommand] void MouseMove(MouseEventArgs e) => SelectionBox = selectionBoxService.CanvasMouseMove(e);
+    [RelayCommand] void MouseUp(MouseButtonEventArgs e) => SelectionBox = selectionBoxService.CanvasMouseUp(Shapes, e);
 
-    ShapeViewModel TargetShape(MouseEventArgs e)
+    internal void Init()
     {
-        var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-        return (ShapeViewModel)shapeVisualElement.DataContext;
-    }
-
-    Point RelativeMousePosition(MouseEventArgs e)
-    {
-        var shapeVisualElement = (FrameworkElement)e.MouseDevice.Target;
-        var canvas = FindParentOfType<Canvas>(shapeVisualElement);
-        return Mouse.GetPosition(canvas);
-    }
-
-    static T FindParentOfType<T>(DependencyObject o)
-    {
-        dynamic parent = VisualTreeHelper.GetParent(o);
-        return parent.GetType().IsAssignableFrom(typeof(T)) ? parent : FindParentOfType<T>(parent);
+        IsActive = true;
+        state.Init();
     }
 }

@@ -5,16 +5,12 @@ public class UndoRedoController
     readonly Stack<IUndoRedoCommand> undoStack = new();
     readonly Stack<IUndoRedoCommand> redoStack = new();
 
-    public static UndoRedoController Instance { get; } = new();
-
-    UndoRedoController() { }
-
     public void AddAndExecute(IUndoRedoCommand command)
     {
         undoStack.Push(command);
         redoStack.Clear();
         command.Do();
-        SendUndoRedoChangedMessage();
+        SendChangedMessage();
     }
 
     public bool CanUndo(int count) => undoStack.Count >= count;
@@ -28,7 +24,7 @@ public class UndoRedoController
                 var command = undoStack.Pop();
                 redoStack.Push(command);
                 command.Undo();
-                SendUndoRedoChangedMessage();
+                SendChangedMessage();
             }
         }
     }
@@ -44,10 +40,10 @@ public class UndoRedoController
                 var command = redoStack.Pop();
                 undoStack.Push(command);
                 command.Do();
-                SendUndoRedoChangedMessage();
+                SendChangedMessage();
             }
         }
     }
 
-    void SendUndoRedoChangedMessage() => WeakReferenceMessenger.Default.Send(new UndoRedoChangedMessage());
+    static void SendChangedMessage() => WeakReferenceMessenger.Default.Send<UndoRedoChangedMessage>();
 }
