@@ -53,9 +53,9 @@ public class MouseService(StateService state, UndoRedoController undoRedo)
             if (addingLineFrom == null) { addingLineFrom = shape; addingLineFrom.IsSelected = true; }
             else if (addingLineFrom.Number != shape.Number)
             {
-                undoRedo.AddAndExecute(new AddLineCommand(state.Lines, 
-                    state.AddingLineType == typeof(Line) ? 
-                        new LineViewModel() { From = addingLineFrom, To = shape } : 
+                undoRedo.AddAndExecute(new AddLineCommand(state.Lines,
+                    state.AddingLineType == typeof(Line) ?
+                        new LineViewModel() { From = addingLineFrom, To = shape } :
                         new DashLineViewModel() { From = addingLineFrom, To = shape }));
                 addingLineFrom.IsSelected = false;
                 state.AddingLineType = default;

@@ -1,5 +1,3 @@
 ﻿namespace _02350AdvancedDemo.Model;
 
-public class DashLine : Line // TODO: Try to change to records.
-{
-}
+public record DashLine(int FromNumber, int ToNumber, string Label) : Line(FromNumber, ToNumber, Label);

@@ -1,5 +1,3 @@
 ﻿namespace _02350AdvancedDemo.Model;
 
-public class Circle : Shape // TODO: Try to change to records.
-{
-}
+public record Circle(Point Position, Size Size, List<string> Data) : Shape(Position, Size, Data);

@@ -1,5 +1,3 @@
 ﻿namespace _02350AdvancedDemo.Model;
 
-public class Square : Shape // TODO: Try to change to records.
-{
-}
+public record Square(Point Position, Size Size, List<string> Data) : Shape(Position, Size, Data);
